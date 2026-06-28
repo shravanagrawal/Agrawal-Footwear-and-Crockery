@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - Agrawal Footwear & Crockery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Firebase SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+        :root {
+            --bg-color: #0d0e12;
+            --surface-color: #16171e;
+            --surface-border: #22242d;
+            --text-primary: #f1f2f6;
+            --text-secondary: #8e92a4;
+            --primary-accent: #c5a880; /* Champagne Gold */
+            --secondary-accent: #9a7d56; /* Rich Bronze */
+            --gold-accent: #b59a57;
+            --gradient-accent: #c5a880;
+            --gradient-gold: #b59a57;
+            --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --font-headings: 'Playfair Display', serif;
+            --font-ui: 'Outfit', sans-serif;
+            --btn-radius: 6px;
+            --card-radius: 8px;
+        }
+
+        body {
+            font-family: var(--font-ui);
+            margin: 0;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            background: var(--header-bg, rgba(15, 12, 41, 0.7));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--surface-border);
+            color: var(--header-text, #fff);
+            padding: 25px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        header h1 {
+            font-family: var(--font-headings);
+            font-size: 2.2rem;
+            margin: 0;
+            color: var(--text-primary);
+            letter-spacing: 1px;
+        }
+
+        .card {
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            padding: 30px;
+            margin: 25px auto;
+            border-radius: var(--card-radius, 8px);
+            box-shadow: var(--glass-shadow);
+            max-width: 1000px;
+            transition: all 0.3s ease;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 95%;
+            padding: 10px 14px;
+            margin: 8px 0;
+            border: 1px solid var(--surface-border);
+            border-radius: var(--btn-radius, 6px);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-primary);
+            font-family: var(--font-ui);
+            transition: all 0.2s ease;
+        }
+
+        ::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        ::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        select option {
+            background-color: #1b1b22;
+            color: #ffffff;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-accent);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.25);
+        }
+
+        button {
+            background: var(--primary-accent);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--btn-radius, 6px);
+            font-family: var(--font-ui);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            filter: brightness(1.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--surface-border);
+        }
+
+        th,
+        td {
+            border: 1px solid var(--surface-border);
+            padding: 15px 12px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background: var(--primary-accent);
+            color: #fff;
+            font-family: var(--font-ui);
+            font-weight: 600;
+        }
+
+        td {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-secondary);
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        /* Tab Navigation Styles */
+        .tab-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--surface-border);
+            padding: 8px 20px;
+            border-radius: var(--btn-radius, 6px);
+            font-family: var(--font-ui);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: none;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            border-color: var(--primary-accent);
+            background: var(--primary-accent);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-accent);
+            color: #fff;
+            border-color: var(--primary-accent);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Premium Toast Notification */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast-box {
+            background: rgba(30, 30, 45, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--surface-border);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-family: var(--font-ui);
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease forwards;
+            min-width: 250px;
+        }
+
+        .toast-box.success {
+            border-left: 4px solid #27ae60;
+        }
+
+        .toast-box.warning {
+            border-left: 4px solid #f39c12;
+        }
+
+        .toast-box.info {
+            border-left: 4px solid #4a90e2;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(120%); opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+    <header style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 10px;">
+        <img id="mainLogo" src="logo.png" alt="Agrawal Footwear & Crockery Logo" style="height: 80px; width: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 2px solid rgba(255, 255, 255, 0.1);">
+        <h1 style="margin: 0;">Admin Panel</h1>
+        <p style="margin: 0; font-size: 14px; color: var(--text-secondary);">Agrawal Footwear & Crockery</p>
+        <div style="display: flex; align-items: center; gap: 15px; margin-top: 5px; flex-wrap: wrap; justify-content: center;">
+            <a href="index.html" target="_blank" style="color: var(--primary-accent); text-decoration: none; font-size: 14px; font-weight: 600; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--primary-accent)'">&larr; Go to Main Website</a>
+            <span style="color: var(--surface-border);">|</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <label for="themeSelect" style="font-size: 13px; color: var(--text-secondary); font-weight: 600;">Theme:</label>
+                <select id="themeSelect" onchange="changeTheme(this.value)" style="width: auto; margin: 0; padding: 4px 8px; border-radius: 20px; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--surface-border); font-family: var(--font-ui); font-size: 12px; font-weight: 600; cursor: pointer; outline: none; transition: all 0.3s ease;">
+                    <option value="dark">Midnight Dark</option>
+                    <option value="light">Light Mode</option>
+                    <option value="cream">Cream Classic</option>
+                    <option value="onyx">Onyx Gray</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login -->
+    <div id="loginCard" class="card">
+        <h2>Login</h2>
+        <div style="margin-bottom: 12px; text-align: left; margin-left: 2.5%;">
+            <label for="loginRole" style="display:block; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: var(--text-secondary);">Login Type</label>
+            <select id="loginRole" style="width: 95%; margin: 0; padding: 10px 14px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--surface-border); border-radius: 6px; font-family: var(--font-ui); font-size: 14px; cursor: pointer;">
+                <option value="Admin">Admin</option>
+                <option value="Manager">Manager</option>
+            </select>
+        </div>
+        <input type="text" id="adminEmail" placeholder="Email"><br>
+        <input type="password" id="adminPassword" placeholder="Password"><br>
+        <div style="display: flex; align-items: center; gap: 8px; margin: 10px 2.5%; text-align: left;">
+            <input type="checkbox" id="rememberMe" style="width: auto; margin: 0; cursor: pointer;">
+            <label for="rememberMe" style="font-size: 14px; color: var(--text-secondary); cursor: pointer; user-select: none;">Remember Me</label>
+        </div>
+        <button onclick="adminLogin()">Login</button>
+        <p>New admin? <button onclick="registerAdmin()">Register</button></p>
+        <p><a href="#" onclick="showResetPassword()" style="color: #4a90e2; text-decoration: none;">Forgot Password?</a></p>
+    </div>
+
+    <!-- Register -->
+    <div id="registerCard" class="card" style="display:none;">
+        <h2>Register Admin</h2>
+        <input type="text" id="regEmail" placeholder="Email"><br>
+        <input type="password" id="regPassword" placeholder="Password"><br>
+        <button onclick="submitAdminRegister()">Register</button>
+        <button onclick="cancelRegister()" style="background: #555;">Cancel</button>
+    </div>
+
+    <!-- Reset Password Card -->
+    <div id="resetCard" class="card" style="display:none;">
+        <h2>Reset Password</h2>
+        
+        <!-- Step 1: Input Email -->
+        <div id="resetStep1">
+            <p>Enter your registered admin email address to start resetting your password.</p>
+            <input type="text" id="resetEmail" placeholder="Admin Email"><br>
+            <button onclick="startPasswordResetProcess()">Next</button>
+            <button onclick="cancelReset()" style="background: #555;">Cancel</button>
+        </div>
+        
+        <!-- Step 2a: Customizable Security Questions -->
+        <div id="resetStep2a" style="display:none;">
+            <p>Please answer the security questions below to verify your identity:</p>
+            <div id="questionsContainer" style="margin-bottom: 20px; text-align: left; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid var(--surface-border);">
+                <!-- Dynamic questions and answer fields will be populated here -->
+            </div>
+            <button onclick="verifySecurityAnswers()">Verify Answers</button>
+            <button onclick="cancelReset()" style="background: #555;">Cancel</button>
+        </div>
+
+        <!-- Step 2b: OTP Code (Fallback if no questions are set) -->
+        <div id="resetStep2b" style="display:none;">
+            <p>A verification code (OTP) has been sent to your email.</p>
+            <input type="text" id="resetOTP" placeholder="Verification Code (OTP)"><br>
+            <button onclick="verifyCode()">Verify Code</button>
+            <button onclick="cancelReset()" style="background: #555;">Cancel</button>
+        </div>
+
+        <!-- Step 3: Set New Password -->
+        <div id="resetStep3" style="display:none;">
+            <p>Verification successful. Please enter your new password.</p>
+            <input type="password" id="newPassword" placeholder="New Password"><br>
+            <input type="password" id="confirmNewPassword" placeholder="Confirm New Password"><br>
+            <button onclick="updatePassword()">Update Password</button>
+            <button onclick="cancelReset()" style="background: #555;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="card" style="display:none;">
+        <div class="tab-nav">
+            <button id="tabProd" class="tab-btn active" onclick="switchTab('prodSection', this)">Products</button>
+            <button id="tabOrder" class="tab-btn" onclick="switchTab('orderSection', this)">Orders</button>
+            <button id="tabReview" class="tab-btn" onclick="switchTab('reviewSection', this)">Reviews</button>
+            <button id="tabStory" class="tab-btn" onclick="switchTab('storySection', this)">Brand Stories</button>
+            <button id="tabSecurity" class="tab-btn" onclick="switchTab('securitySection', this)">Security Settings</button>
+        </div>
+
+        <!-- Products tab -->
+        <div id="prodSection" class="tab-content">
+            <h2>Product Management</h2>
+            <input type="text" id="prodName" placeholder="Product Name"><br>
+            <input type="text" id="prodCategory" placeholder="Category"><br>
+            <input type="number" id="prodPrice" placeholder="Price (INR)" step="0.01"><br>
+            <input type="text" id="prodImg" placeholder="Image URL"><br>
+            <button onclick="addProduct()">Add Product</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Image</th>
+                        <th id="prodActionHeader">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="productTable"></tbody>
+            </table>
+        </div>
+
+        <!-- Orders tab -->
+        <div id="orderSection" class="tab-content" style="display:none;">
+            <h2>Order Management</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Customer</th>
+                        <th>Price</th>
+                        <th>Payment Method</th>
+                        <th>Delivery Method</th>
+                        <th>Status</th>
+                        <th>Delivery Details</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orderTable"></tbody>
+            </table>
+        </div>
+
+        <!-- Reviews tab -->
+        <div id="reviewSection" class="tab-content" style="display:none;">
+            <h2>Review Management</h2>
+            <div id="reviewTable"></div>
+        </div>
+
+        <!-- Brand Stories tab -->
+        <div id="storySection" class="tab-content" style="display:none;">
+            <h2>Brand Stories Management</h2>
+            <div style="background: rgba(255,255,255,0.02); padding: 25px; border-radius: 15px; border: 1px solid var(--surface-border); margin-bottom: 25px;">
+                <h3 id="storyFormTitle" style="margin-top:0;">Add New Brand Story</h3>
+                <input type="hidden" id="editStoryId">
+                <input type="text" id="storyTitle" placeholder="Story Title"><br>
+                <input type="text" id="storyTag" placeholder="Tag (e.g. Footwear Guide, Table Styling, Behind the Brand)"><br>
+                <input type="text" id="storyDate" placeholder="Date (e.g. June 11, 2026)"><br>
+                <input type="text" id="storyImgUrl" placeholder="Image URL"><br>
+                <div style="margin: 8px 0; font-size: 14px; color: var(--text-secondary);">Or upload an image:</div>
+                <input type="file" id="storyImgFile" accept="image/*" style="width: auto; background: transparent; border: none; padding: 0;"><br>
+                <textarea id="storyContent" placeholder="Write full HTML content or text..." style="height: 150px;"></textarea><br>
+                <button onclick="saveBrandStory()">Save Story</button>
+                <button onclick="cancelStoryEdit()" id="cancelStoryEditBtn" style="display:none; background: #555;">Cancel Edit</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Tag</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="storyTable"></tbody>
+            </table>
+        </div>
+
+        <!-- Security Settings tab -->
+        <div id="securitySection" class="tab-content" style="display:none;">
+            <h2>Admin Security Settings</h2>
+            <div style="background: rgba(255,255,255,0.02); padding: 25px; border-radius: 15px; border: 1px solid var(--surface-border); margin-bottom: 25px;">
+                <h3>Authentication Status</h3>
+                <p>Current Security Mode: <strong id="securityModeStatus" style="color: var(--primary-accent); text-transform: uppercase;">Checking...</strong></p>
+                <p style="font-size: 13px; color: var(--text-secondary);" id="securityModeDesc"></p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.02); padding: 25px; border-radius: 15px; border: 1px solid var(--surface-border); margin-bottom: 25px;">
+                <h3>Customizable Security Questions</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
+                    Set up security questions. If you forget your password, you will be required to answer these questions exactly to reset your password.
+                </p>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px; font-weight: 600;">Security Question 1</label>
+                    <select id="secQ1" style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--surface-border); border-radius: 6px;" onchange="toggleCustomQ(1)">
+                        <option value="What was the name of your first school?">What was the name of your first school?</option>
+                        <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                        <option value="In what city were you born?">In what city were you born?</option>
+                        <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                        <option value="CUSTOM">Write your own custom question...</option>
+                    </select>
+                    <input type="text" id="secCustomQ1" placeholder="Enter custom question" style="display:none; width: 90%; margin-bottom: 10px;">
+                    <input type="password" id="secA1" placeholder="Answer to Question 1" style="width: 90%;">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px; font-weight: 600;">Security Question 2</label>
+                    <select id="secQ2" style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--surface-border); border-radius: 6px;" onchange="toggleCustomQ(2)">
+                        <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                        <option value="What was the make and model of your first car?">What was the make and model of your first car?</option>
+                        <option value="What is your favorite book?">What is your favorite book?</option>
+                        <option value="In what city did your parents meet?">In what city did your parents meet?</option>
+                        <option value="CUSTOM">Write your own custom question...</option>
+                    </select>
+                    <input type="text" id="secCustomQ2" placeholder="Enter custom question" style="display:none; width: 90%; margin-bottom: 10px;">
+                    <input type="password" id="secA2" placeholder="Answer to Question 2" style="width: 90%;">
+                </div>
+
+                <button onclick="saveSecurityQuestions()" style="background: var(--gradient-gold); border: none; font-weight: bold;">Save Security Questions</button>
+            </div>
+
+            <div id="adminManagementSection" style="background: rgba(255,255,255,0.02); padding: 25px; border-radius: 15px; border: 1px solid var(--surface-border); margin-bottom: 25px; display: none;">
+                <h3>Admin User Management</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
+                    As the primary administrator, you can manage the secondary administrator or manager, and set their credentials and login type.
+                </p>
+                
+                <!-- Add/Edit Secondary User Form -->
+                <div id="secondaryUserForm" style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 8px; border: 1px solid var(--surface-border); margin-bottom: 25px;">
+                    <h4 id="secondaryFormTitle" style="margin-top: 0; margin-bottom: 15px; color: var(--primary-accent);">Add Secondary User</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; align-items: end; flex-wrap: wrap;">
+                        <div>
+                            <label style="display:block; font-size:12px; margin-bottom:5px; color: var(--text-secondary);">Email</label>
+                            <input type="text" id="secUserEmail" placeholder="secondary@example.com" style="width: 90%; margin: 0;">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:12px; margin-bottom:5px; color: var(--text-secondary);">Password <span id="pwdHint" style="font-size:10px; color:#c5a880;"></span></label>
+                            <input type="password" id="secUserPassword" placeholder="Password" style="width: 90%; margin: 0;">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:12px; margin-bottom:5px; color: var(--text-secondary);">Login Type (Role)</label>
+                            <select id="secUserRole" style="width: 95%; margin: 0; padding: 10px 14px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--surface-border); border-radius: 6px; font-family: var(--font-ui); cursor: pointer;">
+                                <option value="Admin">Admin</option>
+                                <option value="Manager">Manager</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button onclick="saveSecondaryUser()" style="background: var(--gradient-gold); margin: 0;">Save Credentials</button>
+                        <button onclick="cancelSecondaryEdit()" id="cancelSecEditBtn" style="display: none; background: #555; margin: 0;">Cancel</button>
+                    </div>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; padding: 10px;">User Email</th>
+                            <th style="text-align: center; padding: 10px; width: 150px;">Role</th>
+                            <th style="text-align: center; padding: 10px; width: 220px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminListTableBody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr style="border-color: var(--surface-border); margin: 30px 0;">
+        <button onclick="window.open('index.html', '_blank')" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); margin-right: 15px; box-shadow: none;">Go to Main Website</button>
+        <button onclick="logout()" style="background: #e74c3c; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);">Logout</button>
+    </div>
+
+    <script>
+        const API_BASE = (window.location.protocol === 'file:') ? 'http://localhost:5000' : '';
+        const CONFIG = { API_BASE_URL: API_BASE };
+        // Theme System configurations
+        const themes = {
+            dark: {
+                '--bg-color': '#0d0e12',
+                '--surface-color': '#16171e',
+                '--surface-border': '#22242d',
+                '--text-primary': '#f1f2f6',
+                '--text-secondary': '#8e92a4',
+                '--glass-shadow': '0 4px 20px rgba(0, 0, 0, 0.25)',
+                '--body-background-image': 'none',
+                '--header-bg': '#121319',
+                '--header-text': '#f1f2f6',
+                '--header-title-gradient': 'none',
+                '--nav-bg': '#121319',
+                '--select-option-bg': '#16171e',
+                '--select-option-color': '#f1f2f6'
+            },
+            light: {
+                '--bg-color': '#f8fafc',
+                '--surface-color': '#ffffff',
+                '--surface-border': '#e2e8f0',
+                '--text-primary': '#0f172a',
+                '--text-secondary': '#475569',
+                '--glass-shadow': '0 4px 20px rgba(0, 0, 0, 0.05)',
+                '--body-background-image': 'none',
+                '--header-bg': '#ffffff',
+                '--header-text': '#0f172a',
+                '--header-title-gradient': 'none',
+                '--nav-bg': '#ffffff',
+                '--select-option-bg': '#ffffff',
+                '--select-option-color': '#0f172a'
+            },
+            cream: {
+                '--bg-color': '#faf8f5',
+                '--surface-color': '#ffffff',
+                '--surface-border': '#e6e2db',
+                '--text-primary': '#2e251b',
+                '--text-secondary': '#706553',
+                '--glass-shadow': '0 4px 20px rgba(46, 37, 27, 0.05)',
+                '--body-background-image': 'none',
+                '--header-bg': '#fcfbf9',
+                '--header-text': '#2e251b',
+                '--header-title-gradient': 'none',
+                '--nav-bg': '#fcfbf9',
+                '--select-option-bg': '#ffffff',
+                '--select-option-color': '#2e251b'
+            },
+            onyx: {
+                '--bg-color': '#14151a',
+                '--surface-color': '#1d1e24',
+                '--surface-border': '#2a2c37',
+                '--text-primary': '#e5e7eb',
+                '--text-secondary': '#9ca3af',
+                '--glass-shadow': '0 4px 25px rgba(0, 0, 0, 0.3)',
+                '--body-background-image': 'none',
+                '--header-bg': '#18191f',
+                '--header-text': '#e5e7eb',
+                '--header-title-gradient': 'none',
+                '--nav-bg': '#18191f',
+                '--select-option-bg': '#1d1e24',
+                '--select-option-color': '#e5e7eb'
+            }
+        };
+
+        function changeTheme(themeName) {
+            const root = document.documentElement;
+            const theme = themes[themeName] || themes.dark;
+            Object.keys(theme).forEach(key => {
+                if (key === '--body-background-image') {
+                    document.body.style.backgroundImage = theme[key];
+                } else {
+                    root.style.setProperty(key, theme[key]);
+                }
+            });
+            localStorage.setItem('selected-theme', themeName);
+            const select = document.getElementById('themeSelect');
+            if (select) select.value = themeName;
+        }
+
+        // Apply theme immediately on load
+        (function() {
+            const savedTheme = localStorage.getItem('selected-theme') || 'dark';
+            window.addEventListener('DOMContentLoaded', () => {
+                changeTheme(savedTheme);
+            });
+        })();
+
+        let loggedInAdmin = null;
+        let authMode = 'local'; // 'local' or 'firebase'
+        let firebaseConfig = null;
+        let currentUserToken = null; // Store current Firebase ID token or Local session token
+
+        function applyRoleRestrictions() {
+            if (loggedInAdmin && loggedInAdmin.role === 'Manager') {
+                const tabReview = document.getElementById("tabReview");
+                const tabStory = document.getElementById("tabStory");
+                const tabSecurity = document.getElementById("tabSecurity");
+                
+                if (tabReview) tabReview.style.display = "none";
+                if (tabStory) tabStory.style.display = "none";
+                if (tabSecurity) tabSecurity.style.display = "none";
+                
+                // If on a hidden tab, switch to products tab
+                const currentActive = document.querySelector(".tab-nav button.active");
+                if (currentActive && (currentActive.id === "tabReview" || currentActive.id === "tabStory" || currentActive.id === "tabSecurity")) {
+                    switchTab('prodSection', document.getElementById("tabProd"));
+                }
+            } else {
+                const tabReview = document.getElementById("tabReview");
+                const tabStory = document.getElementById("tabStory");
+                const tabSecurity = document.getElementById("tabSecurity");
+                
+                if (tabReview) tabReview.style.display = "";
+                if (tabStory) tabStory.style.display = "";
+                if (tabSecurity) tabSecurity.style.display = "";
+            }
+        }
+
+        // Initialize dynamic configurations on load
+        window.addEventListener('load', async () => {
+            // Set header logo dynamically from base64
+            if (typeof LOGO_BASE64 !== 'undefined') {
+                document.getElementById("mainLogo").src = LOGO_BASE64;
+            }
+
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/auth/config`);
+                const data = await res.json();
+                if (data.success) {
+                    authMode = data.mode;
+                    firebaseConfig = data.firebaseConfig;
+                    
+                    document.getElementById("securityModeStatus").innerText = authMode + " mode";
+                    if (authMode === 'firebase') {
+                        document.getElementById("securityModeDesc").innerText = "Authentication is managed securely using Google Firebase Auth. Password hashing and authentication states are client-driven and verified on the server.";
+                        // Initialize Firebase Client
+                        firebase.initializeApp(firebaseConfig);
+                        
+                        // Observe auth state changes
+                        firebase.auth().onAuthStateChanged(async (user) => {
+                            if (user) {
+                                loggedInAdmin = { email: user.email, role: 'Admin' };
+                                currentUserToken = await user.getIdToken();
+                                document.getElementById("loginCard").style.display = "none";
+                                document.getElementById("registerCard").style.display = "none";
+                                document.getElementById("dashboard").style.display = "block";
+                                applyRoleRestrictions();
+                                loadProducts();
+                                loadOrders();
+                                loadReviews();
+                                loadBrandStories();
+                            } else {
+                                logoutFrontend();
+                            }
+                        });
+                    } else {
+                        document.getElementById("securityModeDesc").innerText = "Authentication is managed via Local Auth Mode. Passwords are encrypted on the server using bcryptjs and session tokens are validated on every administrative request.";
+                        // Check session and local storage
+                        const savedEmail = sessionStorage.getItem("adminEmail") || localStorage.getItem("adminEmail");
+                        const savedToken = sessionStorage.getItem("adminToken") || localStorage.getItem("adminToken");
+                        const savedRole = sessionStorage.getItem("adminRole") || localStorage.getItem("adminRole");
+                        if (savedEmail && savedToken) {
+                            loggedInAdmin = { email: savedEmail, role: savedRole || 'Admin' };
+                            currentUserToken = savedToken;
+                            document.getElementById("loginCard").style.display = "none";
+                            document.getElementById("dashboard").style.display = "block";
+                            applyRoleRestrictions();
+                            loadProducts();
+                            loadOrders();
+                            loadReviews();
+                            loadBrandStories();
+                            loadAdminList();
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to load security config:", e);
+                authMode = 'offline';
+                document.getElementById("securityModeStatus").innerText = "Offline (Local Local Storage Fallback)";
+                document.getElementById("securityModeDesc").innerText = "Could not connect to the backend server. Falling back to unsecure localStorage auth. Start the backend on port 5000 to enable secure auth.";
+                
+                // Check offline session storage
+                const savedEmail = sessionStorage.getItem("adminEmail") || localStorage.getItem("adminEmail");
+                const savedRole = sessionStorage.getItem("adminRole") || localStorage.getItem("adminRole");
+                if (savedEmail) {
+                    loggedInAdmin = { email: savedEmail, role: savedRole || 'Admin' };
+                    currentUserToken = 'offline-token';
+                    document.getElementById("loginCard").style.display = "none";
+                    document.getElementById("dashboard").style.display = "block";
+                    applyRoleRestrictions();
+                    loadProducts();
+                    loadOrders();
+                    loadReviews();
+                    loadBrandStories();
+                }
+            }
+        });
+
+        function logoutFrontend() {
+            loggedInAdmin = null;
+            currentUserToken = null;
+            sessionStorage.removeItem("adminEmail");
+            sessionStorage.removeItem("adminToken");
+            sessionStorage.removeItem("adminRole");
+            localStorage.removeItem("adminEmail");
+            localStorage.removeItem("adminToken");
+            localStorage.removeItem("adminRole");
+            applyRoleRestrictions();
+            document.getElementById("dashboard").style.display = "none";
+            document.getElementById("loginCard").style.display = "block";
+        }
+
+        // Toggle custom question input box
+        function toggleCustomQ(num) {
+            const select = document.getElementById("secQ" + num);
+            const customInput = document.getElementById("secCustomQ" + num);
+            if (select.value === 'CUSTOM') {
+                customInput.style.display = 'block';
+            } else {
+                customInput.style.display = 'none';
+            }
+        }
+
+        // Save customizable security questions
+        async function saveSecurityQuestions() {
+            if (!loggedInAdmin) {
+                alert("You must be logged in to set security questions.");
+                return;
+            }
+
+            let q1 = document.getElementById("secQ1").value;
+            if (q1 === 'CUSTOM') q1 = document.getElementById("secCustomQ1").value.trim();
+            const a1 = document.getElementById("secA1").value.trim();
+
+            let q2 = document.getElementById("secQ2").value;
+            if (q2 === 'CUSTOM') q2 = document.getElementById("secCustomQ2").value.trim();
+            const a2 = document.getElementById("secA2").value.trim();
+
+            if (!q1 || !a1 || !q2 || !a2) {
+                alert("Please select/enter questions and provide answers for both.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/admin/save-questions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentUserToken}`
+                    },
+                    body: JSON.stringify({
+                        email: loggedInAdmin.email,
+                        questions: [
+                            { q: q1, a: a1 },
+                            { q: q2, a: a2 }
+                        ]
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert("Security questions saved successfully!");
+                    document.getElementById("secA1").value = "";
+                    document.getElementById("secA2").value = "";
+                    document.getElementById("secCustomQ1").value = "";
+                    document.getElementById("secCustomQ2").value = "";
+                    document.getElementById("secQ1").value = document.getElementById("secQ1").options[0].value;
+                    document.getElementById("secQ2").value = document.getElementById("secQ2").options[0].value;
+                    toggleCustomQ(1);
+                    toggleCustomQ(2);
+                } else {
+                    alert("Error saving questions: " + data.error);
+                }
+            } catch (e) {
+                console.error("Error setting questions:", e);
+                alert("Failed to connect to the server.");
+            }
+        }
+
+        let editingSecondaryEmail = null;
+
+        // Load registered admin list (Primary admin only)
+        async function loadAdminList() {
+            if (!loggedInAdmin) return;
+            
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/admin/list`, {
+                    headers: {
+                        'Authorization': `Bearer ${currentUserToken}`
+                    }
+                });
+                const data = await res.json();
+                if (data.success && data.admins && data.admins.length > 0) {
+                    const primaryAdmin = data.admins[0].email;
+                    const isPrimary = loggedInAdmin.email === primaryAdmin;
+                    
+                    if (isPrimary) {
+                        document.getElementById("adminManagementSection").style.display = "block";
+                        const tbody = document.getElementById("adminListTableBody");
+                        tbody.innerHTML = "";
+                        
+                        data.admins.forEach((admin, idx) => {
+                            const row = document.createElement("tr");
+                            const isSelf = admin.email === loggedInAdmin.email;
+                            
+                            let actionHtml = "";
+                            if (isSelf) {
+                                actionHtml = `<span style="color: var(--text-secondary); font-size: 13px;">Primary Admin (You)</span>`;
+                            } else {
+                                actionHtml = `
+                                    <button onclick="editSecondaryUser('${admin.email}', '${admin.role}')" style="background: var(--primary-accent); font-size: 12px; padding: 6px 12px; margin-right: 5px; box-shadow: none;">Edit</button>
+                                    <button onclick="removeAdmin('${admin.email}')" style="background: #e74c3c; font-size: 12px; padding: 6px 12px; margin: 0; box-shadow: none;">Remove</button>
+                                `;
+                            }
+                            
+                            row.innerHTML = `
+                                <td style="text-align: left; padding: 12px; font-weight: 500; color: #fff;">${admin.email}</td>
+                                <td style="text-align: center; padding: 12px; font-weight: 500; color: var(--primary-accent);">${admin.role}</td>
+                                <td style="text-align: center; padding: 12px;">${actionHtml}</td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                        
+                        // Toggle forms based on whether secondary user already exists
+                        const hasSecondary = data.admins.length > 1;
+                        if (hasSecondary && !editingSecondaryEmail) {
+                            // Don't show add form if we already have 2 users and not editing
+                            document.getElementById("secondaryUserForm").style.display = "none";
+                        } else if (!hasSecondary) {
+                            document.getElementById("secondaryUserForm").style.display = "block";
+                            document.getElementById("secondaryFormTitle").innerText = "Add Secondary User";
+                            document.getElementById("pwdHint").innerText = "";
+                            document.getElementById("cancelSecEditBtn").style.display = "none";
+                        }
+                    } else {
+                        document.getElementById("adminManagementSection").style.display = "none";
+                    }
+                }
+            } catch (e) {
+                console.error("Error loading admin list:", e);
+                document.getElementById("adminManagementSection").style.display = "none";
+            }
+        }
+
+        function editSecondaryUser(email, role) {
+            editingSecondaryEmail = email;
+            document.getElementById("secondaryUserForm").style.display = "block";
+            document.getElementById("secondaryFormTitle").innerText = "Edit Secondary User";
+            document.getElementById("secUserEmail").value = email;
+            document.getElementById("secUserPassword").value = "";
+            document.getElementById("secUserPassword").placeholder = "Leave blank to keep unchanged";
+            document.getElementById("pwdHint").innerText = "(leave blank to keep unchanged)";
+            document.getElementById("secUserRole").value = role;
+            document.getElementById("cancelSecEditBtn").style.display = "inline-block";
+        }
+
+        function cancelSecondaryEdit() {
+            editingSecondaryEmail = null;
+            document.getElementById("secUserEmail").value = "";
+            document.getElementById("secUserPassword").value = "";
+            document.getElementById("secUserPassword").placeholder = "Password";
+            document.getElementById("pwdHint").innerText = "";
+            document.getElementById("secUserRole").value = "Admin";
+            document.getElementById("cancelSecEditBtn").style.display = "none";
+            loadAdminList();
+        }
+
+        async function saveSecondaryUser() {
+            const email = document.getElementById("secUserEmail").value.trim();
+            const password = document.getElementById("secUserPassword").value.trim();
+            const role = document.getElementById("secUserRole").value;
+
+            if (!email) {
+                alert("Please enter user email.");
+                return;
+            }
+
+            if (!editingSecondaryEmail && !password) {
+                alert("Password is required for a new user.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/admin/save-secondary`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentUserToken}`
+                    },
+                    body: JSON.stringify({ email, password, role })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(editingSecondaryEmail ? "Secondary user updated successfully!" : "Secondary user created successfully!", "success");
+                    cancelSecondaryEdit();
+                } else {
+                    alert("Failed to save credentials: " + data.error);
+                }
+            } catch (e) {
+                console.error("Error saving secondary credentials:", e);
+                alert("Failed to connect to the server.");
+            }
+        }
+
+        // Remove a registered admin (Primary admin only)
+        async function removeAdmin(email) {
+            if (!confirm(`Are you sure you want to remove user "${email}"?`)) {
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/admin/remove-admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentUserToken}`
+                    },
+                    body: JSON.stringify({ emailToRemove: email })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`User "${email}" removed successfully!`, 'success');
+                    cancelSecondaryEdit();
+                } else {
+                    alert("Failed to remove admin: " + data.error);
+                }
+            } catch (e) {
+                console.error("Error removing admin:", e);
+                alert("Connection failed.");
+            }
+        }
+
+        // Secure registration
+        async function registerAdmin() {
+            document.getElementById("loginCard").style.display = "none";
+            document.getElementById("registerCard").style.display = "block";
+            document.getElementById("regEmail").value = "";
+            document.getElementById("regPassword").value = "";
+        }
+
+        function cancelRegister() {
+            document.getElementById("registerCard").style.display = "none";
+            document.getElementById("loginCard").style.display = "block";
+        }
+
+        async function submitAdminRegister() {
+            let email = document.getElementById("regEmail").value.trim();
+            let pw = document.getElementById("regPassword").value.trim();
+            if (!email || !pw) {
+                alert("Please fill in email and password.");
+                return;
+            }
+
+            if (authMode === 'firebase') {
+                try {
+                    await firebase.auth().createUserWithEmailAndPassword(email, pw);
+                    alert("Admin registered in Firebase successfully!");
+                } catch (error) {
+                    alert("Firebase Registration failed: " + error.message);
+                }
+            } else {
+                // Local Register
+                try {
+                    const res = await fetch(`${CONFIG.API_BASE_URL}/api/auth/register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password: pw })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        alert("Admin registered successfully! Please log in.");
+                        document.getElementById("registerCard").style.display = "none";
+                        document.getElementById("loginCard").style.display = "block";
+                    } else {
+                        alert("Registration failed: " + data.error);
+                    }
+                } catch (e) {
+                    alert("Could not connect to the backend server.");
+                }
+            }
+        }
+
+        async function adminLogin() {
+            let email = document.getElementById("adminEmail").value.trim();
+            let pw = document.getElementById("adminPassword").value.trim();
+            let role = document.getElementById("loginRole").value;
+            let rememberMe = document.getElementById("rememberMe").checked;
+            if (!email || !pw) {
+                alert("Please fill in email and password.");
+                return;
+            }
+
+            if (authMode === 'firebase') {
+                try {
+                    await firebase.auth().signInWithEmailAndPassword(email, pw);
+                } catch (error) {
+                    alert("Login failed: " + error.message);
+                }
+            } else {
+                // Local Auth Login
+                try {
+                    const res = await fetch(`${CONFIG.API_BASE_URL}/api/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password: pw, role, rememberMe })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        loggedInAdmin = { email: email, role: data.role };
+                        currentUserToken = data.token;
+                        
+                        const storage = rememberMe ? localStorage : sessionStorage;
+                        storage.setItem("adminEmail", email);
+                        storage.setItem("adminToken", data.token);
+                        storage.setItem("adminRole", data.role);
+                        
+                        document.getElementById("loginCard").style.display = "none";
+                        document.getElementById("dashboard").style.display = "block";
+                        applyRoleRestrictions();
+                        loadProducts();
+                        loadOrders();
+                        loadReviews();
+                        loadBrandStories();
+                        loadAdminList();
+                    } else {
+                        alert("Login failed: " + data.error);
+                    }
+                } catch (e) {
+                    alert("Failed to connect to the backend server.");
+                }
+            }
+        }
+
+        async function logout() {
+            if (authMode === 'firebase') {
+                try {
+                    await firebase.auth().signOut();
+                } catch (e) {
+                    console.error("Firebase logout error:", e);
+                }
+            } else {
+                try {
+                    await fetch(`${CONFIG.API_BASE_URL}/api/auth/logout`, { 
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${currentUserToken}`
+                        }
+                    });
+                } catch (e) {
+                    console.error("Local logout error:", e);
+                }
+                logoutFrontend();
+            }
+        }
+
+        // Products
+        function addProduct() {
+            let name = document.getElementById("prodName").value;
+            let cat = document.getElementById("prodCategory").value;
+            let price = document.getElementById("prodPrice").value;
+            let img = document.getElementById("prodImg").value;
+            if (name && cat && price && img) {
+                let products = JSON.parse(localStorage.getItem("products")) || [];
+                products.push({ name, category: cat, price: parseFloat(price) || 0, img });
+                localStorage.setItem("products", JSON.stringify(products));
+                loadProducts();
+                document.getElementById("prodName").value = "";
+                document.getElementById("prodCategory").value = "";
+                document.getElementById("prodPrice").value = "";
+                document.getElementById("prodImg").value = "";
+            } else {
+                alert("Please fill in all fields (Name, Category, Price, and Image URL).");
+            }
+        }
+
+        function loadProducts() {
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+            let table = document.getElementById("productTable");
+            table.innerHTML = "";
+            
+            const isManager = loggedInAdmin && loggedInAdmin.role === 'Manager';
+            const actionHeader = document.getElementById("prodActionHeader");
+            if (actionHeader) {
+                actionHeader.style.display = isManager ? "none" : "";
+            }
+
+            products.forEach((p, i) => {
+                let row = document.createElement("tr");
+                let priceDisplay = p.price !== undefined ? `Rs. ${parseFloat(p.price).toFixed(2)}` : 'Rs. 1,499.00';
+                let actionHtml = isManager ? "" : `<td><button onclick="deleteProduct(${i})">Delete</button></td>`;
+                
+                row.innerHTML = `<td>${p.name}</td><td>${p.category}</td><td>${priceDisplay}</td><td><img src="${p.img}" width="50" style="border-radius:4px;"></td>${actionHtml}`;
+                table.appendChild(row);
+            });
+        }
+
+        function deleteProduct(i) {
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+            products.splice(i, 1);
+            localStorage.setItem("products", JSON.stringify(products));
+            loadProducts();
+        }
+
+        // Orders
+        function loadOrders() {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            let table = document.getElementById("orderTable");
+            table.innerHTML = "";
+            orders.forEach((o, i) => {
+                let row = document.createElement("tr");
+                let paymentSelect = `
+                    <select onchange="updatePaymentMethod(${i}, this.value)" style="width: 125px; margin: 0; padding: 6px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--surface-border); border-radius: 6px;">
+                        <option value="UPI" ${o.paymentMethod === 'UPI' ? 'selected' : ''}>UPI</option>
+                        <option value="Credit Card" ${o.paymentMethod === 'Credit Card' ? 'selected' : ''}>Credit Card</option>
+                        <option value="Debit Card" ${o.paymentMethod === 'Debit Card' ? 'selected' : ''}>Debit Card</option>
+                        <option value="Cash on Delivery" ${o.paymentMethod === 'Cash on Delivery' ? 'selected' : ''}>Cash on Delivery</option>
+                    </select>
+                `;
+                let priceDisplay = o.price || 'Rs. 1,499.00';
+                row.innerHTML = `
+                    <td>${o.id}</td>
+                    <td>${o.product}</td>
+                    <td>${o.customer}</td>
+                    <td>${priceDisplay}</td>
+                    <td>${paymentSelect}</td>
+                    <td>${o.deliveryMethod || 'Home Delivery'}</td>
+                    <td>${o.status}</td>
+                    <td>${o.delivery}</td>
+                    <td>
+                        <button onclick="updateStatus(${i},'Accepted')">Accept</button>
+                        <button onclick="updateStatus(${i},'Rejected')">Reject</button><br>
+                        <input type="text" id="delivery${i}" placeholder="Delivery details" value="${o.delivery}" style="width: 80%; padding: 6px; margin: 5px 0;"><br>
+                        <button onclick="setDelivery(${i})">Update</button>
+                        <button onclick="downloadInvoice(${o.id})" style="background: #27ae60;">Invoice (PDF)</button>
+                        <button onclick="deleteOrder(${i})" style="background: #e74c3c;">Clear</button>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        function updatePaymentMethod(i, val) {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            orders[i].paymentMethod = val;
+            localStorage.setItem("orders", JSON.stringify(orders));
+            loadOrders();
+        }
+
+        async function updateStatus(i, status) {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            let order = orders[i];
+            order.status = status;
+            localStorage.setItem("orders", JSON.stringify(orders));
+            loadOrders();
+
+            if (authMode === 'offline') {
+                showToast(`Order status updated successfully (offline mode).`, 'success');
+                return;
+            }
+
+            // Send order status update email to customer
+            try {
+                showToast(`Sending email update to customer...`, 'info');
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/send-order-update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: order.id,
+                        customerName: order.customer,
+                        customerEmail: order.email,
+                        productName: order.product,
+                        status: status,
+                        delivery: order.delivery,
+                        price: order.price,
+                        deliveryMethod: order.deliveryMethod,
+                        paymentMethod: order.paymentMethod
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`Email update sent to customer!`, 'success');
+                } else {
+                    showToast(`Failed to send email: ` + data.error, 'warning');
+                }
+            } catch (e) {
+                console.error("Error sending order status email:", e);
+                showToast(`Email server offline.`, 'warning');
+            }
+        }
+
+        async function setDelivery(i) {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            let order = orders[i];
+            let val = document.getElementById("delivery" + i).value;
+            order.delivery = val;
+            localStorage.setItem("orders", JSON.stringify(orders));
+            loadOrders();
+
+            if (authMode === 'offline') {
+                showToast(`Shipping details updated successfully (offline mode).`, 'success');
+                return;
+            }
+
+            // Send delivery update email to customer
+            try {
+                showToast(`Sending shipping update email...`, 'info');
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/send-order-update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: order.id,
+                        customerName: order.customer,
+                        customerEmail: order.email,
+                        productName: order.product,
+                        status: order.status,
+                        delivery: val,
+                        price: order.price,
+                        deliveryMethod: order.deliveryMethod,
+                        paymentMethod: order.paymentMethod
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`Shipping details updated & email sent!`, 'success');
+                } else {
+                    showToast(`Failed to send email: ` + data.error, 'warning');
+                }
+            } catch (e) {
+                console.error("Error sending delivery email:", e);
+                showToast(`Email server offline.`, 'warning');
+            }
+        }
+
+        // Professional Toast notifications
+        function showToast(message, type = 'info') {
+            let container = document.getElementById("toastContainer");
+            if (!container) {
+                container = document.createElement("div");
+                container.id = "toastContainer";
+                container.className = "toast-container";
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement("div");
+            toast.className = `toast-box ${type}`;
+            
+            let icon = 'ℹ️';
+            if (type === 'success') icon = '✅';
+            if (type === 'warning') icon = '⚠️';
+
+            toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease forwards';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Reviews
+        function loadReviews() {
+            let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+            let div = document.getElementById("reviewTable");
+            div.innerHTML = "";
+            reviews.forEach((r, i) => {
+                let block = document.createElement("div");
+                block.className = "review-block";
+                block.style.background = "rgba(255,255,255,0.02)";
+                block.style.border = "1px solid var(--surface-border)";
+                block.style.padding = "15px";
+                block.style.borderRadius = "10px";
+                block.style.marginBottom = "15px";
+
+                let photoHtml = "";
+                if (r.photo) {
+                    photoHtml = `<br><img src="${r.photo}" alt="Review photo" style="max-width: 200px; border-radius: 8px; margin-top: 10px; display: block; border: 1px solid var(--surface-border);">`;
+                }
+
+                block.innerHTML = `<strong>${r.name}:</strong> ${r.text}<br>
+        Stars: ${"★".repeat(r.stars)}${"☆".repeat(5 - r.stars)}${photoHtml}<br>
+        <strong>Admin Reply:</strong> ${r.reply || "None"}<br>
+        <input type="text" id="reply${i}" placeholder="Write reply" style="width: 80%; padding: 8px; margin-top: 10px;">
+        <button onclick="addReply(${i})">Reply</button><hr style="border-color: var(--surface-border); margin-top: 15px;">`;
+                div.appendChild(block);
+            });
+        }
+
+        function addReply(i) {
+            let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+            let reply = document.getElementById("reply" + i).value.trim();
+            reviews[i].reply = reply;
+            localStorage.setItem("reviews", JSON.stringify(reviews));
+            loadReviews();
+        }
+
+        function deleteOrder(i) {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            orders.splice(i, 1);
+            localStorage.setItem("orders", JSON.stringify(orders));
+            loadOrders();
+        }
+
+        // Tab switching
+        function switchTab(tabId, btn) {
+            document.querySelectorAll(".tab-content").forEach(el => el.style.display = "none");
+            document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+            document.getElementById(tabId).style.display = "block";
+            btn.classList.add("active");
+            if (tabId === 'securitySection') {
+                loadAdminList();
+            }
+        }
+
+        // Brand Stories Management
+        const defaultBrandStories = [
+            {
+                id: 1,
+                title: "Finding the Perfect Fit: A Guide to Leather Care",
+                tag: "Footwear Guide",
+                date: "June 10, 2026",
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+                content: `
+                    <p>Premium leather footwear is an investment in both comfort and style. To ensure your pairs remain in pristine condition, a regular maintenance routine is essential.</p>
+                    <h3>1. Clean After Every Wear</h3>
+                    <p>Dust and dirt can wear away the finish of leather over time. Use a soft brush or a slightly damp cloth to wipe down your shoes after wearing them.</p>
+                    <h3>2. Condition Regularly</h3>
+                    <p>Leather is like skin and can dry out and crack. Apply a high-quality leather conditioner every 12 to 15 wears to restore moisture and keep the leather supple.</p>
+                    <h3>3. Use Shoe Trees</h3>
+                    <p>Unfinished cedar shoe trees absorb moisture and maintain the shoe's shape, preventing creasing and cracking.</p>
+                    <p>At Agrawal Footwear, we select only the finest grade leathers to build our shoes, guaranteeing lasting durability if cared for properly.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "5 Dinner Table Settings for Modern Hosting",
+                tag: "Table Styling",
+                date: "June 08, 2026",
+                image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80",
+                content: `
+                    <p>Hosting a dinner party is an art form, and the presentation of your table sets the mood for the entire evening. Here are five modern concepts for styling your dinner table using elegant crockery.</p>
+                    <h3>1. Minimalist Monochrome</h3>
+                    <p>Stick to a single tone—like matte black or soft cream plates paired with dark linens. This creates a clean, architectural aesthetic that looks incredibly sophisticated.</p>
+                    <h3>2. Rustic Organic</h3>
+                    <p>Combine stoneware plates with raw wood placemats and fresh branches or herbs. It feels cozy, authentic, and inviting.</p>
+                    <h3>3. Gold & Porcelain Luxury</h3>
+                    <p>Use white bone china plates with fine gold rims (like our Royal Gold collection) alongside gold-plated cutlery. Perfect for celebrations.</p>
+                    <p>Our crockery collection at Agrawal Footwear & Crockery features diverse styles from artisanal clay creations to royal gilded dinnerware, perfect for any hosting vibe.</p>
+                `
+            },
+            {
+                id: 3,
+                title: "Artistry in Clay: The Porcelain Making Process",
+                tag: "Behind the Brand",
+                date: "May 24, 2026",
+                image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?auto=format&fit=crop&w=800&q=80",
+                content: `
+                    <p>Have you ever wondered how raw kaolin clay is transformed into fine, porcelain plates? It is a journey of heat, skill, and timeless patience.</p>
+                    <h3>Phase 1: Shaping</h3>
+                    <p>The pure clay is mixed and spun on potters' wheels or cast in custom molds to achieve the delicate curves of our plates and cups.</p>
+                    <h3>Phase 2: First Fire (Bisque)</h3>
+                    <p>The clay is fired at a low temperature to harden it enough to receive glaze, yet remain porous enough to absorb it.</p>
+                    <h3>Phase 3: Glazing & High Firing</h3>
+                    <p>A glass-like coating is applied, and the pieces are fired again at extremely high temperatures (around 1300°C / 2372°F) which fuses the glaze to the clay body, producing glass-smooth, durable porcelain.</p>
+                    <p>Each piece in our collections undergoes rigorous quality control to ensure you receive only flawless masterpieces.</p>
+                `
+            }
+        ];
+
+        function loadBrandStories() {
+            let stories = JSON.parse(localStorage.getItem("brandPosts"));
+            if (!stories || stories.length === 0) {
+                stories = defaultBrandStories;
+                localStorage.setItem("brandPosts", JSON.stringify(stories));
+            }
+            let table = document.getElementById("storyTable");
+            table.innerHTML = "";
+            stories.forEach(story => {
+                let row = document.createElement("tr");
+                row.innerHTML = `
+                    <td><img src="${story.image}" width="60" style="border-radius:4px;"></td>
+                    <td><strong>${story.title}</strong></td>
+                    <td><span style="background:rgba(255,255,255,0.05); padding:4px 8px; border-radius:12px; font-size:12px;">${story.tag}</span></td>
+                    <td>${story.date}</td>
+                    <td>
+                        <button onclick="editBrandStory(${story.id})" style="background:#f39c12;">Edit</button>
+                        <button onclick="deleteBrandStory(${story.id})" style="background:#e74c3c;">Delete</button>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        function saveBrandStory() {
+            let idField = document.getElementById("editStoryId").value;
+            let title = document.getElementById("storyTitle").value.trim();
+            let tag = document.getElementById("storyTag").value.trim();
+            let date = document.getElementById("storyDate").value.trim();
+            let imgUrl = document.getElementById("storyImgUrl").value.trim();
+            let fileInput = document.getElementById("storyImgFile");
+            let content = document.getElementById("storyContent").value.trim();
+
+            if (!title || !tag || !date || !content) {
+                alert("Please fill in Title, Tag, Date, and Content.");
+                return;
+            }
+
+            let stories = JSON.parse(localStorage.getItem("brandPosts")) || [];
+
+            function proceedSave(finalImage) {
+                if (idField) {
+                    // Update
+                    let idx = stories.findIndex(s => s.id == idField);
+                    if (idx !== -1) {
+                        stories[idx].title = title;
+                        stories[idx].tag = tag;
+                        stories[idx].date = date;
+                        if (finalImage) stories[idx].image = finalImage;
+                        stories[idx].content = content;
+                    }
+                } else {
+                    // Add
+                    let newId = Date.now();
+                    let img = finalImage || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80";
+                    stories.push({ id: newId, title, tag, date, image: img, content });
+                }
+                localStorage.setItem("brandPosts", JSON.stringify(stories));
+                loadBrandStories();
+                cancelStoryEdit();
+            }
+
+            if (fileInput.files && fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    proceedSave(e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                proceedSave(imgUrl);
+            }
+        }
+
+        function editBrandStory(id) {
+            let stories = JSON.parse(localStorage.getItem("brandPosts")) || [];
+            let story = stories.find(s => s.id == id);
+            if (!story) return;
+
+            document.getElementById("editStoryId").value = story.id;
+            document.getElementById("storyTitle").value = story.title;
+            document.getElementById("storyTag").value = story.tag;
+            document.getElementById("storyDate").value = story.date;
+            document.getElementById("storyImgUrl").value = story.image.startsWith("data:") ? "" : story.image;
+            document.getElementById("storyContent").value = story.content;
+
+            document.getElementById("storyFormTitle").innerText = "Edit Brand Story";
+            document.getElementById("cancelStoryEditBtn").style.display = "inline-block";
+        }
+
+        function cancelStoryEdit() {
+            document.getElementById("editStoryId").value = "";
+            document.getElementById("storyTitle").value = "";
+            document.getElementById("storyTag").value = "";
+            document.getElementById("storyDate").value = "";
+            document.getElementById("storyImgUrl").value = "";
+            document.getElementById("storyImgFile").value = "";
+            document.getElementById("storyContent").value = "";
+
+            document.getElementById("storyFormTitle").innerText = "Add New Brand Story";
+            document.getElementById("cancelStoryEditBtn").style.display = "none";
+        }
+
+        function deleteBrandStory(id) {
+            if (confirm("Are you sure you want to delete this brand story?")) {
+                let stories = JSON.parse(localStorage.getItem("brandPosts")) || [];
+                stories = stories.filter(s => s.id != id);
+                localStorage.setItem("brandPosts", JSON.stringify(stories));
+                loadBrandStories();
+            }
+        }
+
+        // Reset Password Functions
+        let resetEmailVal = "";
+        let verifiedResetToken = null; // Temp token after answers are verified
+        let generatedOTP = null; // OTP fallback code
+
+        function showResetPassword() {
+            document.getElementById("loginCard").style.display = "none";
+            document.getElementById("resetCard").style.display = "block";
+            document.getElementById("resetStep1").style.display = "block";
+            document.getElementById("resetStep2a").style.display = "none";
+            document.getElementById("resetStep2b").style.display = "none";
+            document.getElementById("resetStep3").style.display = "none";
+            document.getElementById("resetEmail").value = "";
+        }
+
+        function cancelReset() {
+            document.getElementById("resetCard").style.display = "none";
+            document.getElementById("loginCard").style.display = "block";
+            verifiedResetToken = null;
+            generatedOTP = null;
+            resetEmailVal = "";
+        }
+
+                // Step 1 check: Send OTP directly
+        async function startPasswordResetProcess() {
+            const email = document.getElementById("resetEmail").value.trim();
+            if (!email) {
+                alert("Please enter your email.");
+                return;
+            }
+            resetEmailVal = email;
+            sendVerificationCode();
+        }
+
+        // Verify Answers
+        async function verifySecurityAnswers() {
+            const answerInputs = document.querySelectorAll(".secResetAnswer");
+            const answers = [];
+            answerInputs.forEach(input => answers.push(input.value.trim()));
+
+            if (answers.some(a => !a)) {
+                alert("Please answer all security questions.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/admin/verify-reset-answers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: resetEmailVal, answers })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    verifiedResetToken = data.resetToken;
+                    document.getElementById("resetStep2a").style.display = "none";
+                    document.getElementById("resetStep3").style.display = "block";
+                    document.getElementById("newPassword").value = "";
+                    document.getElementById("confirmNewPassword").value = "";
+                } else {
+                    alert("Verification failed: " + data.error);
+                }
+            } catch (e) {
+                console.error("Error verifying answers:", e);
+                alert("Connection failed.");
+            }
+        }
+
+        // OTP Fallback Send
+        function sendVerificationCode() {
+            // Generate 6-digit OTP
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // Display loading indicator
+            let resetStep1Div = document.getElementById("resetStep1");
+            let originalContent = resetStep1Div.innerHTML;
+            resetStep1Div.innerHTML = "<p>Sending verification code... please wait.</p>";
+
+            // Send OTP via backend API
+            fetch(`${CONFIG.API_BASE_URL}/api/send-otp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: resetEmailVal,
+                    otp: generatedOTP
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                resetStep1Div.innerHTML = originalContent;
+                if (data.success) {
+                    if (data.warning) {
+                        alert("⚠️ Email delivery is unavailable:\n" + data.error + "\n\nDeveloper Fallback: The OTP code has been logged to the server terminal console! Please check there.");
+                    } else {
+                        alert("✉️ A verification code (OTP) has been sent to your registered email.\n\nPlease check your inbox.");
+                    }
+                    document.getElementById("resetStep1").style.display = "none";
+                    document.getElementById("resetStep2b").style.display = "block";
+                    document.getElementById("resetOTP").value = "";
+                } else {
+                    alert("Error sending email: " + data.error);
+                }
+            })
+            .catch(err => {
+                resetStep1Div.innerHTML = originalContent;
+                console.error('API Error:', err);
+                alert("Could not connect to the local email server to send OTP.\n\nPlease make sure the backend server is running on port 5000.");
+            });
+        }
+
+        function verifyCode() {
+            let enteredOTP = document.getElementById("resetOTP").value.trim();
+            if (enteredOTP === generatedOTP) {
+                document.getElementById("resetStep2b").style.display = "none";
+                document.getElementById("resetStep3").style.display = "block";
+                document.getElementById("newPassword").value = "";
+                document.getElementById("confirmNewPassword").value = "";
+            } else {
+                alert("Invalid verification code. Please check and try again.");
+            }
+        }
+
+        async function updatePassword() {
+            let newPw = document.getElementById("newPassword").value.trim();
+            let confirmPw = document.getElementById("confirmNewPassword").value.trim();
+            if (!newPw) {
+                alert("Password cannot be empty.");
+                return;
+            }
+            if (newPw !== confirmPw) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            const tokenToSend = verifiedResetToken || generatedOTP;
+            if (!tokenToSend) {
+                alert("Session expired. Please start the process again.");
+                cancelReset();
+                return;
+            }
+
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/admin/reset-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: resetEmailVal,
+                        token: tokenToSend,
+                        newPassword: newPw
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert("Password updated successfully! Please login with your new password.");
+                    cancelReset();
+                } else {
+                    alert("Reset failed: " + data.error);
+                }
+            } catch (e) {
+                console.error("Error resetting password:", e);
+                alert("Connection error occurred.");
+            }
+        }
+
+        // Generate and download a professional PDF invoice (Admin)
+        function downloadInvoice(orderId) {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            let order = orders.find(o => o.id == orderId);
+            if (!order) {
+                alert("Order not found!");
+                return;
+            }
+
+            // Load logo.js dynamically if not already loaded (prevents large blocking script on page load)
+            if (typeof LOGO_BASE64 === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'logo.js';
+                script.onload = () => {
+                    proceedDownloadInvoice(order);
+                };
+                script.onerror = () => {
+                    console.warn("logo.js failed to load. Downloading invoice with logo.png fallback.");
+                    proceedDownloadInvoice(order);
+                };
+                document.head.appendChild(script);
+            } else {
+                proceedDownloadInvoice(order);
+            }
+        }
+
+        function proceedDownloadInvoice(order) {
+            // Create temporary container for invoice HTML off-screen (opacity: 0 blocks html2canvas)
+            let invoiceWrapper = document.createElement("div");
+            invoiceWrapper.id = "temp-invoice-wrapper";
+            invoiceWrapper.style.position = "absolute";
+            invoiceWrapper.style.top = "-9999px";
+            invoiceWrapper.style.left = "-9999px";
+            invoiceWrapper.style.width = "794px"; /* A4 Width at 96 DPI */
+            invoiceWrapper.style.zIndex = "-99999";
+            invoiceWrapper.style.background = "#fff";
+
+            let invoiceEl = document.createElement("div");
+            invoiceEl.style.padding = "35px 35px";
+            invoiceEl.style.fontFamily = "Arial, sans-serif";
+            invoiceEl.style.color = "#000";
+            invoiceEl.style.background = "#fff";
+            invoiceEl.style.width = "724px"; /* 794 - 70px (padding) */
+            invoiceWrapper.appendChild(invoiceEl);
+            document.body.appendChild(invoiceWrapper);
+
+            // Compute prices
+            let rawPriceStr = (order.price || 'Rs. 1,499.00').replace(/[^0-9.]/g, '');
+            let totalAmount = parseFloat(rawPriceStr) || 1499.00;
+
+            // Delivery fee logic
+            let deliveryCharge = 80.00;
+            if (order.deliveryMethod === 'Store Pickup') {
+                deliveryCharge = 0.00;
+            } else if (order.deliveryCharge !== undefined) {
+                deliveryCharge = parseFloat(order.deliveryCharge) || 0.00;
+            }
+
+            let productTotal = totalAmount - deliveryCharge;
+            const logoSrc = (typeof LOGO_BASE64 !== 'undefined') ? LOGO_BASE64 : 'logo.png';
+
+            // Helper to format date
+            const orderDate = new Date(order.id);
+            const day = String(orderDate.getDate()).padStart(2, '0');
+            const month = String(orderDate.getMonth() + 1).padStart(2, '0');
+            const year = orderDate.getFullYear();
+            const invoiceDateFormatted = `${day}/${month}/${year}`;
+
+            // Helper to convert number to words
+            function numberToWords(num) {
+                const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+                const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+                function numToWordsLessThanThousand(n) {
+                    if (n === 0) return '';
+                    let str = '';
+                    if (n >= 100) {
+                        str += a[Math.floor(n / 100)] + 'Hundred ';
+                        n %= 100;
+                    }
+                    if (n >= 20) {
+                        str += b[Math.floor(n / 10)] + ' ';
+                        n %= 10;
+                    }
+                    if (n > 0) {
+                        str += a[n];
+                    }
+                    return str;
+                }
+
+                if (num === 0) return 'Zero';
+
+                let n = Math.floor(num);
+                let words = '';
+
+                if (Math.floor(n / 10000000) > 0) {
+                    words += numToWordsLessThanThousand(Math.floor(n / 10000000)) + 'Crore ';
+                    n %= 10000000;
+                }
+                if (Math.floor(n / 100000) > 0) {
+                    words += numToWordsLessThanThousand(Math.floor(n / 100000)) + 'Lakh ';
+                    n %= 100000;
+                }
+                if (Math.floor(n / 1000) > 0) {
+                    words += numToWordsLessThanThousand(Math.floor(n / 1000)) + 'Thousand ';
+                    n %= 1000;
+                }
+                words += numToWordsLessThanThousand(n);
+
+                return words.trim() + ' Only';
+            }
+
+            const totalInWords = 'Indian Rupee ' + numberToWords(totalAmount);
+
+            // Populate table rows
+            let itemsTableRows = `
+                <tr style="border-bottom: 1px solid #bbb;">
+                    <td style="border-right: 1px solid #bbb; padding: 10px; text-align: center; vertical-align: top;">1</td>
+                    <td style="border-right: 1px solid #bbb; padding: 10px; vertical-align: top; font-weight: bold; text-transform: uppercase;">${order.product}</td>
+                    <td style="border-right: 1px solid #bbb; padding: 10px; text-align: right; vertical-align: top;">1.00</td>
+                    <td style="border-right: 1px solid #bbb; padding: 10px; text-align: right; vertical-align: top;">${productTotal.toFixed(2)}</td>
+                    <td style="padding: 10px; text-align: right; vertical-align: top; font-weight: bold;">${productTotal.toFixed(2)}</td>
+                </tr>
+            `;
+
+            if (deliveryCharge > 0) {
+                itemsTableRows += `
+                    <tr style="border-bottom: 1px solid #bbb;">
+                        <td style="border-right: 1px solid #bbb; padding: 10px; text-align: center; vertical-align: top;">2</td>
+                        <td style="border-right: 1px solid #bbb; padding: 10px; vertical-align: top; font-weight: bold; text-transform: uppercase;">Delivery Charges</td>
+                        <td style="border-right: 1px solid #bbb; padding: 10px; text-align: right; vertical-align: top;">1.00</td>
+                        <td style="border-right: 1px solid #bbb; padding: 10px; text-align: right; vertical-align: top;">${deliveryCharge.toFixed(2)}</td>
+                        <td style="padding: 10px; text-align: right; vertical-align: top; font-weight: bold;">${deliveryCharge.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+
+            // Set content matching the user's uploaded template exactly
+            invoiceEl.innerHTML = `
+                <div style="border: 1px solid #bbb; padding: 25px; box-sizing: border-box; min-height: 840px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <!-- HEADER WITH LOGO AND COMPANY INFO -->
+                        <div style="display: flex; align-items: flex-start; justify-content: flex-start; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
+                            <img src="${logoSrc}" alt="Logo" style="height: 75px; width: auto; margin-right: 25px; object-fit: contain;">
+                            <div style="line-height: 1.4;">
+                                <h2 style="margin: 0; font-size: 18px; font-weight: bold; color: #000;">Agrawal Footwear And Crockery</h2>
+                                <div style="font-size: 12px; color: #333; margin-top: 4px;">
+                                    Agrawal Footwear And Crockery<br>
+                                    Main Market Birsinghpur<br>
+                                    Birsinghpur Madhya Pradesh 485226<br>
+                                    India<br>
+                                    shravanagrawal62@gmail.com
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TITLE -->
+                        <div style="text-align: right; margin-bottom: 20px;">
+                            <h1 style="margin: 0; font-size: 32px; font-weight: normal; color: #000; letter-spacing: 1px;">TAX INVOICE</h1>
+                        </div>
+
+                        <!-- DETAILS PANEL -->
+                        <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr>
+                                <td style="width: 50%; border-right: 1px solid #bbb; padding: 12px; vertical-align: top;">
+                                    <table style="font-size: 13px; border-collapse: collapse; width: 100%; line-height: 1.8;">
+                                        <tr>
+                                            <td style="width: 110px; color: #333;">#</td>
+                                            <td><strong>: INV-${order.id.toString().slice(-6)}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #333;">Invoice Date</td>
+                                            <td><strong>: ${invoiceDateFormatted}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #333;">Terms</td>
+                                            <td><strong>: Due on Receipt</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #333;">Due Date</td>
+                                            <td><strong>: ${invoiceDateFormatted}</strong></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="width: 50%; padding: 12px; vertical-align: top;">
+                                    <!-- Left blank to match the template exactly -->
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- BILL TO -->
+                        <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr style="background: #f2f2f2; border-bottom: 1px solid #bbb;">
+                                <td style="padding: 6px 12px; font-weight: bold; font-size: 12px; color: #333; text-transform: uppercase;">Bill To</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; line-height: 1.5; color: #000; font-size: 13px;">
+                                    <strong style="font-size: 14px;">${order.customer}</strong><br>
+                                    ${order.phone ? `Phone: ${order.phone}<br>` : ''}
+                                    ${order.email ? `Email: ${order.email}<br>` : ''}
+                                    Address: ${order.delivery || 'Main Market, Birsinghpur, Satna, MP, 485226'}
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ITEMS TABLE -->
+                        <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 25px; font-size: 13px;">
+                            <thead>
+                                <tr style="background: #f2f2f2; border-bottom: 1px solid #bbb; font-weight: bold;">
+                                    <th style="border-right: 1px solid #bbb; padding: 8px 6px; text-align: center; width: 40px;">#</th>
+                                    <th style="border-right: 1px solid #bbb; padding: 8px; text-align: left;">Item & Description</th>
+                                    <th style="border-right: 1px solid #bbb; padding: 8px 6px; text-align: center; width: 80px;">Qty</th>
+                                    <th style="border-right: 1px solid #bbb; padding: 8px; text-align: right; width: 120px;">Rate</th>
+                                    <th style="padding: 8px; text-align: right; width: 120px;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsTableRows}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- BOTTOM SECTION -->
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-top: auto;">
+                        <tr>
+                            <!-- LEFT PANEL: NOTES & TERMS -->
+                            <td style="width: 55%; vertical-align: top; padding-right: 25px; line-height: 1.6;">
+                                <div style="margin-bottom: 15px;">
+                                    <div style="font-weight: bold; font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 2px;">Total In Words</div>
+                                    <div style="font-weight: bold; font-style: italic; font-size: 13px; color: #000;">${totalInWords}</div>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    <div style="font-weight: bold; font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 2px;">Notes</div>
+                                    <div style="color: #333;">Thanks for your business.</div>
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold; font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 2px;">Terms & Conditions</div>
+                                    <div style="color: #333;">Goods One Sold Cannot be Retuned Back</div>
+                                </div>
+                            </td>
+
+                            <!-- RIGHT PANEL: TOTALS & SIGNATURE -->
+                            <td style="width: 45%; vertical-align: top;">
+                                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; line-height: 1.8;">
+                                    <tr>
+                                        <td style="text-align: right; padding: 4px 10px; color: #555;">Sub Total</td>
+                                        <td style="text-align: right; padding: 4px 10px; width: 110px; font-weight: bold;">${totalAmount.toFixed(2)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right; padding: 4px 10px; color: #555;">Discount</td>
+                                        <td style="text-align: right; padding: 4px 10px; font-weight: bold;">(-) 0.00</td>
+                                    </tr>
+                                    <tr style="border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; font-weight: bold; font-size: 14px;">
+                                        <td style="text-align: right; padding: 6px 10px;">Total</td>
+                                        <td style="text-align: right; padding: 6px 10px;">₹${totalAmount.toFixed(2)}</td>
+                                    </tr>
+                                    <tr style="color: #c0392b; font-weight: bold;">
+                                        <td style="text-align: right; padding: 6px 10px;">Payment Made</td>
+                                        <td style="text-align: right; padding: 6px 10px;">(-) ${totalAmount.toFixed(2)}</td>
+                                    </tr>
+                                    <tr style="border-top: 2px double #888; font-weight: bold; font-size: 15px;">
+                                        <td style="text-align: right; padding: 8px 10px;">Balance Due</td>
+                                        <td style="text-align: right; padding: 8px 10px;">₹0.00</td>
+                                    </tr>
+                                </table>
+
+                                <!-- SIGNATURE BOX -->
+                                <div style="border: 1px solid #bbb; padding: 15px; text-align: center;">
+                                    <div style="font-weight: bold; font-size: 11px; margin-bottom: 45px; text-transform: uppercase; color: #000;">AGRAWAL FOOTWEAR AND CROCKERY</div>
+                                    <div style="font-size: 12px; color: #444;">Authorized Signature</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            `;
+
+            let opt = {
+                margin:       [15, 15, 15, 15],
+                filename:     `Invoice_INV_${order.id}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Generate and save the PDF, cleaning up afterwards
+            html2pdf().from(invoiceEl).set(opt).save().then(() => {
+                document.body.removeChild(invoiceWrapper);
+            }).catch(err => {
+                console.error("PDF generation failed:", err);
+                document.body.removeChild(invoiceWrapper);
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Agrawal Footwear & Crockery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+        :root {
+            --bg-color: #0d0e12;
+            --surface-color: #16171e;
+            --surface-border: #22242d;
+            --text-primary: #f1f2f6;
+            --text-secondary: #8e92a4;
+            --primary-accent: #c5a880; /* Champagne Gold */
+            --secondary-accent: #9a7d56; /* Rich Bronze */
+            --gold-accent: #b59a57;
+            --gradient-accent: #c5a880;
+            --gradient-gold: #b59a57;
+            --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --font-headings: 'Playfair Display', serif;
+            --font-ui: 'Outfit', sans-serif;
+            --btn-radius: 6px;
+            --card-radius: 8px;
+        }
+
+        body {
+            font-family: var(--font-ui);
+            margin: 0;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            background: var(--header-bg, rgba(15, 12, 41, 0.7));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--surface-border);
+            color: var(--header-text, #fff);
+            padding: 50px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        header h1 {
+            font-family: var(--font-headings);
+            font-size: 3rem;
+            margin: 0 0 10px 0;
+            color: var(--text-primary);
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-family: var(--font-ui);
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        nav {
+            background: rgba(31, 31, 31, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        nav button {
+            margin: 8px;
+            padding: 10px 24px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            font-family: var(--font-ui);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav button {
+            margin: 8px;
+            padding: 8px 20px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--btn-radius, 6px);
+            font-family: var(--font-ui);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        nav button:hover {
+            color: #fff;
+            border-color: var(--primary-accent);
+            background: var(--primary-accent);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        section {
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            padding: 30px;
+            margin: 25px auto;
+            border-radius: var(--card-radius, 8px);
+            box-shadow: var(--glass-shadow);
+            max-width: 950px;
+            transition: all 0.3s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 95%;
+            padding: 10px 14px;
+            margin: 8px 0;
+            border: 1px solid var(--surface-border);
+            border-radius: var(--btn-radius, 6px);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-primary);
+            font-family: var(--font-ui);
+            transition: all 0.2s ease;
+        }
+
+        ::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        ::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        select option {
+            background-color: var(--select-option-bg, #1b1b22);
+            color: var(--select-option-color, #ffffff);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-accent);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.25);
+        }
+
+        button.action {
+            background: var(--primary-accent);
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: var(--btn-radius, 6px);
+            font-family: var(--font-ui);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        button.action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            filter: brightness(1.05);
+        }
+
+        .product {
+            border: 1px solid var(--surface-border);
+            border-radius: var(--card-radius, 8px);
+            padding: 20px;
+            margin: 15px;
+            display: inline-block;
+            width: 220px;
+            text-align: center;
+            background: var(--surface-color);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .product:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-accent);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        .product img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .review {
+            border-bottom: 1px solid var(--surface-border);
+            padding: 20px 0;
+        }
+
+        .reply {
+            margin-top: 10px;
+            margin-left: 20px;
+            padding-left: 15px;
+            border-left: 2px solid var(--gold-accent);
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .stars {
+            color: var(--gold-accent);
+        }
+
+        footer {
+            background: #000;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 25px;
+            margin-top: 50px;
+            border-top: 1px solid var(--surface-border);
+        }
+
+        /* Hero Section CSS */
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 30px;
+            align-items: center;
+            padding: 20px 0 40px 0;
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        @media (max-width: 768px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+            }
+            .hero-graphics {
+                display: none;
+            }
+        }
+
+        .brand-badge {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold-accent);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .brand-title {
+            font-family: var(--font-headings);
+            font-size: 3.2rem;
+            line-height: 1.15;
+            margin: 0 0 20px 0;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .brand-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--surface-border);
+            padding: 10px 24px;
+            border-radius: var(--btn-radius, 6px);
+            font-family: var(--font-ui);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Hero Graphics */
+        .hero-graphics {
+            position: relative;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: 1;
+        }
+
+        .orb-1 {
+            width: 150px;
+            height: 150px;
+            background: rgba(197, 168, 128, 0.08);
+            top: 10%;
+            left: 20%;
+            animation: float-1 8s infinite alternate ease-in-out;
+        }
+
+        .orb-2 {
+            width: 130px;
+            height: 130px;
+            background: rgba(181, 154, 87, 0.06);
+            bottom: 15%;
+            right: 15%;
+            animation: float-2 6s infinite alternate ease-in-out;
+        }
+
+        @keyframes float-1 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        @keyframes float-2 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-15px, 15px) scale(1.1); }
+        }
+
+        .hero-showcase-box {
+            position: relative;
+            z-index: 2;
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--card-radius, 8px);
+            padding: 25px;
+            width: 220px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+        }
+
+        .hero-showcase-box:hover {
+            transform: scale(1.03) rotate(1deg);
+            border-color: var(--primary-accent);
+        }
+
+        .showcase-tag {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--gold-accent);
+            letter-spacing: 1px;
+        }
+
+        .hero-showcase-box h4 {
+            margin: 8px 0 5px 0;
+            font-family: var(--font-headings);
+            font-size: 1.3rem;
+            color: var(--text-primary);
+        }
+
+        .hero-showcase-box p {
+            margin: 0;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Showcase Grid */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        @media (max-width: 768px) {
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .showcase-card {
+            position: relative;
+            border-radius: var(--card-radius, 8px);
+            height: 280px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding: 30px;
+            border: 1px solid var(--surface-border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .footwear-card {
+            background-image: linear-gradient(to top, rgba(11, 11, 15, 0.95), rgba(11, 11, 15, 0.4)), url('https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .crockery-card {
+            background-image: linear-gradient(to top, rgba(11, 11, 15, 0.95), rgba(11, 11, 15, 0.4)), url('https://images.unsplash.com/photo-1603179219941-d779f32617f2?auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .showcase-card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(144, 19, 254, 0.15));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .showcase-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-accent);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .showcase-card:hover .showcase-card-overlay {
+            opacity: 1;
+        }
+
+        .showcase-card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-pretitle {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-accent);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .showcase-card-content h3 {
+            font-family: var(--font-headings);
+            font-size: 1.8rem;
+            margin: 0 0 10px 0;
+            color: #fff;
+        }
+
+        .showcase-card-content p {
+            margin: 0 0 15px 0;
+            font-size: 13px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .card-link {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gold-accent);
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+
+        .showcase-card:hover .card-link {
+            transform: translateX(5px);
+            color: #fff;
+        }
+
+        /* Philosophy Section */
+        .philosophy-section {
+            padding: 40px 0;
+            border-top: 1px solid var(--surface-border);
+            border-bottom: 1px solid var(--surface-border);
+            text-align: center;
+        }
+
+        .philosophy-section h3 {
+            font-family: var(--font-headings);
+            font-size: 2.2rem;
+            margin: 0 0 35px 0;
+            color: var(--text-primary);
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .philosophy-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .phil-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 30px 20px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .phil-item:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+
+        .phil-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .phil-item h4 {
+            font-family: var(--font-headings);
+            font-size: 1.3rem;
+            margin: 0 0 10px 0;
+            color: var(--text-primary);
+        }
+
+        .phil-item p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Posts/Editorial Section */
+        .posts-section {
+            padding: 50px 0 20px 0;
+        }
+
+        .posts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 35px;
+        }
+
+        @media (max-width: 768px) {
+            .posts-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+        .section-tag {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-accent);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .posts-header h3 {
+            font-family: var(--font-headings);
+            font-size: 2.2rem;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .posts-header p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            max-width: 400px;
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .post-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--surface-border);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary-accent);
+            box-shadow: 0 12px 30px rgba(144, 19, 254, 0.15);
+        }
+
+        .post-img-container {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .post-img {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .post-card:hover .post-img {
+            transform: scale(1.08);
+        }
+
+        .post-tag {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(11, 11, 15, 0.8);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .post-body {
+            padding: 20px;
+        }
+
+        .post-date {
+            font-size: 11px;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .post-body h4 {
+            font-family: var(--font-headings);
+            font-size: 1.25rem;
+            margin: 0 0 10px 0;
+            color: var(--text-primary);
+            line-height: 1.3;
+            height: 50px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .post-body p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin: 0 0 15px 0;
+            height: 60px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .post-link {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-accent);
+        }
+
+        .post-card:hover .post-link {
+            color: var(--text-primary);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.hidden {
+            display: none !important;
+            opacity: 0;
+        }
+
+        .modal-content {
+            background: var(--select-option-bg, #1b1b22);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--card-radius, 8px);
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 30px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <header style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 10px;">
+        <img id="mainLogo" src="logo.png" alt="Agrawal Footwear & Crockery Logo" style="height: 100px; width: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 2px solid rgba(255, 255, 255, 0.1);">
+        <h1 style="margin: 0;">Agrawal Footwear & Crockery</h1>
+        <p style="margin: 0; color: var(--text-secondary);">Step into Style, Serve with Elegance</p>
+    </header>
+
+    <nav>
+        <button onclick="showPage('home')">Home</button>
+        <button onclick="showPage('products')">Products</button>
+        <button onclick="showPage('reviews')">Reviews</button>
+        <button onclick="showPage('trackOrderSection')">Track Order</button>
+        <button onclick="openAdmin()">Admin</button>
+        <div style="display: inline-flex; align-items: center; margin-left: 15px; gap: 8px;">
+            <label for="themeSelect" style="font-size: 13px; color: var(--text-secondary); font-weight: 600;">Theme:</label>
+            <select id="themeSelect" onchange="changeTheme(this.value)" style="width: auto; margin: 0; padding: 6px 12px; border-radius: 20px; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--surface-border); font-family: var(--font-ui); font-size: 12px; font-weight: 600; cursor: pointer; outline: none; transition: all 0.3s ease;">
+                <option value="dark">Midnight Dark</option>
+                <option value="light">Light Mode</option>
+                <option value="cream">Cream Classic</option>
+                <option value="onyx">Onyx Gray</option>
+            </select>
+        </div>
+    </nav>
+
+    <section id="home" class="card">
+        <!-- Hero Banner -->
+        <div class="hero-container">
+            <div class="hero-content">
+                <span class="brand-badge">ESTABLISHED 2026</span>
+                <h2 class="brand-title">Crafting Timeless Living</h2>
+                <p class="brand-subtitle">Explore a handpicked selection of premium footwear that matches your stride and elegant dinnerware that elevates every meal.</p>
+                <div class="hero-actions">
+                    <button class="action" onclick="showPage('products')">Explore Collections</button>
+                    <button class="btn-secondary" onclick="showPage('reviews')">Customer Love</button>
+                </div>
+            </div>
+            <div class="hero-graphics">
+                <div class="glass-orb orb-1"></div>
+                <div class="glass-orb orb-2"></div>
+                <div class="hero-showcase-box">
+                    <span class="showcase-tag">New Collection</span>
+                    <h4>Royal Gold Porcelain</h4>
+                    <p>Experience dining luxury.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Brand Showcase Divisions -->
+        <div class="showcase-grid">
+            <div class="showcase-card footwear-card" onclick="showPage('products')">
+                <div class="showcase-card-overlay"></div>
+                <div class="showcase-card-content">
+                    <span class="card-pretitle">The Footwear Collection</span>
+                    <h3>Walk With Elegance</h3>
+                    <p>From casual sneakers to formal handcrafted leather shoes. Find comfort at every step.</p>
+                    <span class="card-link">Browse Footwear &rarr;</span>
+                </div>
+            </div>
+            <div class="showcase-card crockery-card" onclick="showPage('products')">
+                <div class="showcase-card-overlay"></div>
+                <div class="showcase-card-content">
+                    <span class="card-pretitle">The Crockery Collection</span>
+                    <h3>Dine in Splendor</h3>
+                    <p>Exquisite fine bone china, stoneware, and premium glassware designed for special moments.</p>
+                    <span class="card-link">Browse Crockery &rarr;</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Philosophy Section -->
+        <div class="philosophy-section">
+            <h3>Our Core Values</h3>
+            <div class="philosophy-grid">
+                <div class="phil-item">
+                    <div class="phil-icon">✨</div>
+                    <h4>Artisanal Craft</h4>
+                    <p>Every piece is chosen with an eye for detailed artistry and durability.</p>
+                </div>
+                <div class="phil-item">
+                    <div class="phil-icon">🍃</div>
+                    <h4>Uncompromising Comfort</h4>
+                    <p>Designed for daily luxury. Our footwear is ergonomic, our crockery is user-safe.</p>
+                </div>
+                <div class="phil-item">
+                    <div class="phil-icon">🔒</div>
+                    <h4>Secure Orders</h4>
+                    <p>Every transaction and order tracking is backed by our direct admin verification.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Brand Updates & Editorial Posts Section -->
+        <div class="posts-section">
+            <div class="posts-header">
+                <div>
+                    <span class="section-tag">Brand Stories</span>
+                    <h3>The Editorial Journal</h3>
+                </div>
+                <p>Read about design trends, style advice, and behind-the-scenes stories.</p>
+            </div>
+            <div class="posts-grid" id="brandPostsGrid"></div>
+        </div>
+    </section>
+
+    <section id="products" class="card hidden">
+        <h2>Our Products</h2>
+        <input type="text" id="searchBar" placeholder="Search footwear or crockery..." onkeyup="searchProducts()">
+        <div id="productList"></div>
+        <h3>Place an Order</h3>
+        <input type="text" id="orderName" placeholder="Your name"><br>
+        <input type="email" id="orderEmail" placeholder="Your email"><br>
+        <div style="margin: 8px 0; font-size: 14px; color: var(--text-secondary);">Select Product:</div>
+        <select id="orderProduct" onchange="onProductSelectChange()">
+            <!-- Populated dynamically -->
+        </select><br>
+        <div id="customProductFields" style="display: none;">
+            <input type="text" id="orderProductCustom" placeholder="Enter custom product name"><br>
+            <input type="number" id="orderProductCustomPrice" placeholder="Enter custom price (INR)" step="0.01" oninput="calculateOrderTotal()"><br>
+        </div>
+        <div style="margin: 8px 0; font-size: 14px; color: var(--text-secondary);">Select Delivery Option:</div>
+        <select id="orderDeliveryMethod" onchange="calculateOrderTotal()">
+            <option value="Home Delivery">Home Delivery (Rs. 80.00 charge)</option>
+            <option value="Store Pickup">Store Pickup (Free)</option>
+        </select><br>
+        
+        <div id="orderTotalPreview" style="margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); border-radius: 10px; font-size: 14px; line-height: 1.6; max-width: 300px; display: inline-block; text-align: left;">
+            <div>Subtotal: Rs. 0.00</div>
+            <div>Delivery Charge: Rs. 80.00</div>
+            <div style="font-weight: bold; color: var(--gold-accent); font-size: 15px; margin-top: 5px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 5px;">Grand Total: Rs. 0.00</div>
+        </div>
+        
+        <div style="margin: 8px 0; font-size: 14px; color: var(--text-secondary);">Select Payment Method:</div>
+        <select id="orderPayment">
+            <option value="UPI">UPI</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Debit Card">Debit Card</option>
+            <option value="Cash on Delivery">Cash on Delivery</option>
+        </select><br>
+        <button class="action" onclick="placeOrder()">Place Order</button>
+        <div id="orderResult"></div>
+    </section>
+
+    <section id="reviews" class="card hidden">
+        <h2>Customer Reviews</h2>
+        <input type="text" id="reviewName" placeholder="Your name"><br>
+        <textarea id="reviewText" placeholder="Write your review..."></textarea><br>
+        <select id="reviewStars">
+            <option value="5">★★★★★</option>
+            <option value="4">★★★★☆</option>
+            <option value="3">★★★☆☆</option>
+            <option value="2">★★☆☆☆</option>
+            <option value="1">★☆☆☆☆</option>
+        </select><br>
+        <input type="text" id="reviewImgUrl" placeholder="Image URL (optional)"><br>
+        <div style="margin: 8px 0; font-size: 14px; color: var(--text-secondary);">Or upload an image:</div>
+        <input type="file" id="reviewImgFile" accept="image/*" style="width: auto; background: transparent; border: none; padding: 0;"><br>
+        <button class="action" onclick="addReview()">Submit Review</button>
+        <div id="reviewList"></div>
+    </section>
+
+    <section id="trackOrderSection" class="card hidden">
+        <h2>Track Your Order</h2>
+        <input type="text" id="trackId" placeholder="Enter your Order ID"><br>
+        <button class="action" onclick="trackOrder()">Track</button>
+        <div id="trackResult"></div>
+    </section>
+
+    <footer style="text-align: center; padding: 40px 20px; border-top: 1px solid var(--surface-border); margin-top: 50px;">
+        <p style="margin: 0 0 10px 0; font-size: 14px; color: var(--text-secondary);">Agrawal Footwear and Crockery, Main Market Birsinghpur, Satna, Madhya Pradesh 485226</p>
+        <p style="margin: 0; font-size: 12px; color: #666;">&copy; 2026 Agrawal Footwear & Crockery | Developed by Shravan Agrawal</p>
+        <div id="visitCounter" style="margin-top: 20px; display: inline-flex; align-items: center; gap: 8px; background: var(--surface-color); border: 1px solid var(--surface-border); padding: 6px 16px; border-radius: 20px; font-size: 13px; color: var(--text-primary); box-shadow: var(--glass-shadow);">
+            <span style="display: inline-block; width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; box-shadow: 0 0 8px #2ecc71;"></span>
+            <span>Total Visits: <strong id="visitCountValue">...</strong></span>
+        </div>
+    </footer>
+
+    <!-- Modal for reading posts -->
+    <div id="postModal" class="modal-overlay hidden" onclick="closePostModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closePostModal()">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = (window.location.protocol === 'file:') ? 'http://localhost:5000' : '';
+        const CONFIG = { API_BASE_URL: API_BASE };
+        // Theme System configurations
+        const themes = {
+            dark: {
+                '--bg-color': '#0d0e12',
+                '--surface-color': '#16171e',
+                '--surface-border': '#22242d',
+                '--text-primary': '#f1f2f6',
+                '--text-secondary': '#8e92a4',
+                '--glass-shadow': '0 4px 20px rgba(0, 0, 0, 0.25)',
+                '--body-background-image': 'none',
+                '--header-bg': '#121319',
+                '--header-text': '#f1f2f6',
+                '--header-title-gradient': 'none',
+                '--nav-bg': '#121319',
+                '--select-option-bg': '#16171e',
+                '--select-option-color': '#f1f2f6'
+            },
+            light: {
+                '--bg-color': '#f8fafc',
+                '--surface-color': '#ffffff',
+                '--surface-border': '#e2e8f0',
+                '--text-primary': '#0f172a',
+                '--text-secondary': '#475569',
+                '--glass-shadow': '0 4px 20px rgba(0, 0, 0, 0.05)',
+                '--body-background-image': 'none',
+                '--header-bg': '#ffffff',
+                '--header-text': '#0f172a',
+                '--header-title-gradient': 'none',
+                '--nav-bg': '#ffffff',
+                '--select-option-bg': '#ffffff',
+                '--select-option-color': '#0f172a'
+            },
+            cream: {
+                '--bg-color': '#faf8f5',
+                '--surface-color': '#ffffff',
+                '--surface-border': '#e6e2db',
+                '--text-primary': '#2e251b',
+                '--text-secondary': '#706553',
+                '--glass-shadow': '0 4px 20px rgba(46, 37, 27, 0.05)',
+                '--body-background-image': 'none',
+                '--header-bg': '#fcfbf9',
+                '--header-text': '#2e251b',
+                '--header-title-gradient': 'none',
+                '--nav-bg': '#fcfbf9',
+                '--select-option-bg': '#ffffff',
+                '--select-option-color': '#2e251b'
+            },
+            onyx: {
+                '--bg-color': '#14151a',
+                '--surface-color': '#1d1e24',
+                '--surface-border': '#2a2c37',
+                '--text-primary': '#e5e7eb',
+                '--text-secondary': '#9ca3af',
+                '--glass-shadow': '0 4px 25px rgba(0, 0, 0, 0.3)',
+                '--body-background-image': 'none',
+                '--header-bg': '#18191f',
+                '--header-text': '#e5e7eb',
+                '--header-title-gradient': 'none',
+                '--nav-bg': '#18191f',
+                '--select-option-bg': '#1d1e24',
+                '--select-option-color': '#e5e7eb'
+            }
+        };
+
+        function changeTheme(themeName) {
+            const root = document.documentElement;
+            const theme = themes[themeName] || themes.dark;
+            Object.keys(theme).forEach(key => {
+                if (key === '--body-background-image') {
+                    document.body.style.backgroundImage = theme[key];
+                } else {
+                    root.style.setProperty(key, theme[key]);
+                }
+            });
+            localStorage.setItem('selected-theme', themeName);
+            const select = document.getElementById('themeSelect');
+            if (select) select.value = themeName;
+        }
+
+        // Apply theme immediately on load
+        (function() {
+            const savedTheme = localStorage.getItem('selected-theme') || 'dark';
+            window.addEventListener('DOMContentLoaded', () => {
+                changeTheme(savedTheme);
+            });
+        })();
+
+        function showPage(pageId) {
+            document.querySelectorAll("section").forEach(sec => sec.classList.add("hidden"));
+            document.getElementById(pageId).classList.remove("hidden");
+            if (pageId === 'home') loadBrandPosts();
+            if (pageId === 'products') {
+                loadProducts();
+                populateOrderProducts();
+            }
+            if (pageId === 'reviews') loadReviews();
+        }
+
+        function openAdmin() {
+            window.open("admin.html", "_blank");
+        }
+
+        // Products
+        function loadProducts() {
+            let list = document.getElementById("productList");
+            list.innerHTML = "";
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+            products.forEach(p => {
+                let div = document.createElement("div");
+                div.className = "product";
+                let priceDisplay = p.price !== undefined ? `Rs. ${parseFloat(p.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'Rs. 1,499.00';
+                div.innerHTML = `<img src="${p.img}" alt="${p.name}"><h4>${p.name}</h4><p>${p.category}</p><p class="price" style="font-weight: bold; color: var(--gold-accent); margin-top: 8px; font-size: 14px;">${priceDisplay}</p>`;
+                list.appendChild(div);
+            });
+        }
+
+        function searchProducts() {
+            let query = document.getElementById("searchBar").value.toLowerCase();
+            let list = document.getElementById("productList");
+            list.innerHTML = "";
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+            products.filter(p => p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query))
+                .forEach(p => {
+                    let div = document.createElement("div");
+                    div.className = "product";
+                    let priceDisplay = p.price !== undefined ? `Rs. ${parseFloat(p.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'Rs. 1,499.00';
+                    div.innerHTML = `<img src="${p.img}" alt="${p.name}"><h4>${p.name}</h4><p>${p.category}</p><p class="price" style="font-weight: bold; color: var(--gold-accent); margin-top: 8px; font-size: 14px;">${priceDisplay}</p>`;
+                    list.appendChild(div);
+                });
+        }
+
+        function calculateOrderTotal() {
+            let productSelect = document.getElementById("orderProduct");
+            let priceVal = 0;
+            
+            if (productSelect.value === "CUSTOM") {
+                let customPriceInput = document.getElementById("orderProductCustomPrice").value;
+                priceVal = parseFloat(customPriceInput) || 0;
+            } else {
+                let selectedOpt = productSelect.options[productSelect.selectedIndex];
+                priceVal = selectedOpt ? parseFloat(selectedOpt.dataset.price) || 0 : 0;
+            }
+            
+            let deliveryMethod = document.getElementById("orderDeliveryMethod").value;
+            let deliveryCharge = (deliveryMethod === "Home Delivery") ? 80.00 : 0.00;
+            let total = priceVal + deliveryCharge;
+            
+            document.getElementById("orderTotalPreview").innerHTML = 
+                `<div>Subtotal: Rs. ${priceVal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>` +
+                `<div>Delivery Charge: Rs. ${deliveryCharge.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>` +
+                `<div style="font-weight: bold; color: var(--gold-accent); font-size: 15px; margin-top: 5px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 5px;">Grand Total: Rs. ${total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>`;
+        }
+
+        // Orders
+        function placeOrder() {
+            let name = document.getElementById("orderName").value.trim();
+            let email = document.getElementById("orderEmail").value.trim();
+            let productSelect = document.getElementById("orderProduct");
+            let paymentMethod = document.getElementById("orderPayment").value;
+            let deliveryMethod = document.getElementById("orderDeliveryMethod").value;
+            
+            let product = "";
+            let priceVal = 0;
+            
+            if (productSelect.value === "CUSTOM") {
+                product = document.getElementById("orderProductCustom").value.trim();
+                let customPriceInput = document.getElementById("orderProductCustomPrice").value;
+                priceVal = parseFloat(customPriceInput) || 1499.00;
+            } else {
+                product = productSelect.value;
+                let selectedOpt = productSelect.options[productSelect.selectedIndex];
+                priceVal = parseFloat(selectedOpt.dataset.price) || 1499.00;
+            }
+            
+            if (name && email && product) {
+                let orders = JSON.parse(localStorage.getItem("orders")) || [];
+                let id = Date.now();
+                
+                let deliveryCharge = (deliveryMethod === "Home Delivery") ? 80.00 : 0.00;
+                let grandTotal = priceVal + deliveryCharge;
+                
+                let priceFormatted = `Rs. ${grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                let productPriceFormatted = `Rs. ${priceVal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                
+                orders.push({ 
+                    id, 
+                    product, 
+                    customer: name, 
+                    email: email, 
+                    status: "Pending", 
+                    delivery: "Not set", 
+                    paymentMethod: paymentMethod, 
+                    price: priceFormatted, // Grand Total
+                    productPrice: productPriceFormatted,
+                    deliveryMethod: deliveryMethod,
+                    deliveryCharge: deliveryCharge
+                });
+                localStorage.setItem("orders", JSON.stringify(orders));
+                document.getElementById("orderResult").innerHTML = "Placing order... please wait.";
+
+                // Send email notification via backend
+                fetch(`${CONFIG.API_BASE_URL}/api/send-order`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderId: id,
+                        customerName: name,
+                        customerEmail: email,
+                        productName: product,
+                        price: priceFormatted,
+                        paymentMethod: paymentMethod,
+                        deliveryMethod: deliveryMethod
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    let invoiceBtn = `<br><button class="action" onclick="downloadInvoice(${id})" style="margin-top: 10px;">Download Invoice (PDF)</button>`;
+                    if (data.success) {
+                        document.getElementById("orderResult").innerHTML = `Order placed successfully! Your Order ID: <b>${id}</b>.${invoiceBtn}`;
+                    } else {
+                        console.warn("Email notice:", data.error);
+                        document.getElementById("orderResult").innerHTML = `Order placed successfully! Your Order ID: <b>${id}</b>.${invoiceBtn}`;
+                    }
+                })
+                .catch(err => {
+                    console.warn('API Error (Email server offline):', err);
+                    let invoiceBtn = `<br><button class="action" onclick="downloadInvoice(${id})" style="margin-top: 10px;">Download Invoice (PDF)</button>`;
+                    document.getElementById("orderResult").innerHTML = `Order placed successfully! Your Order ID: <b>${id}</b>.${invoiceBtn}`;
+                });
+
+                // Clear input fields
+                document.getElementById("orderName").value = "";
+                document.getElementById("orderEmail").value = "";
+                if (productSelect.value === "CUSTOM") {
+                    document.getElementById("orderProductCustom").value = "";
+                    document.getElementById("orderProductCustomPrice").value = "";
+                }
+                productSelect.value = productSelect.options[0] ? productSelect.options[0].value : "";
+                document.getElementById("orderDeliveryMethod").value = "Home Delivery";
+                onProductSelectChange();
+            } else {
+                alert("Please fill in your name, email, and the product name.");
+            }
+        }
+
+        function populateOrderProducts() {
+            let select = document.getElementById("orderProduct");
+            if (!select) return;
+            select.innerHTML = "";
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+            products.forEach(p => {
+                let priceDisplay = p.price !== undefined ? `Rs. ${parseFloat(p.price).toFixed(2)}` : 'Rs. 1,499.00';
+                let opt = document.createElement("option");
+                opt.value = p.name;
+                opt.dataset.price = p.price !== undefined ? p.price : 1499.00;
+                opt.textContent = `${p.name} (${priceDisplay})`;
+                select.appendChild(opt);
+            });
+            // Add custom option
+            let customOpt = document.createElement("option");
+            customOpt.value = "CUSTOM";
+            customOpt.textContent = "Custom Product / Other...";
+            select.appendChild(customOpt);
+            
+            onProductSelectChange();
+        }
+
+        function onProductSelectChange() {
+            let select = document.getElementById("orderProduct");
+            let customFields = document.getElementById("customProductFields");
+            if (!select || !customFields) return;
+            if (select.value === "CUSTOM") {
+                customFields.style.display = "block";
+            } else {
+                customFields.style.display = "none";
+            }
+            calculateOrderTotal();
+        }
+
+        function trackOrder() {
+            let id = document.getElementById("trackId").value.trim();
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            let order = orders.find(o => o.id == id);
+            if (order) {
+                document.getElementById("trackResult").innerHTML =
+                    `Order ID: ${order.id}<br>Product: ${order.product}<br>Status: ${order.status}<br>Delivery: ${order.delivery}<br>Payment: ${order.paymentMethod || 'UPI'}<br>Price: ${order.price || 'Rs. 1,499.00'}<br><button class="action" onclick="downloadInvoice(${order.id})" style="margin-top:10px;">Download Invoice (PDF)</button>`;
+            } else {
+                document.getElementById("trackResult").innerHTML = "Order not found.";
+            }
+        }
+
+        // Reviews
+        function addReview() {
+            let name = document.getElementById("reviewName").value.trim();
+            let text = document.getElementById("reviewText").value.trim();
+            let stars = document.getElementById("reviewStars").value;
+            let imgUrl = document.getElementById("reviewImgUrl").value.trim();
+            let fileInput = document.getElementById("reviewImgFile");
+
+            if (!name || !text) {
+                alert("Please fill in your name and review text.");
+                return;
+            }
+
+            let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+
+            function saveAndReload(photoData) {
+                reviews.push({ name, text, stars, reply: "", photo: photoData || "" });
+                localStorage.setItem("reviews", JSON.stringify(reviews));
+                loadReviews();
+                document.getElementById("reviewName").value = "";
+                document.getElementById("reviewText").value = "";
+                document.getElementById("reviewImgUrl").value = "";
+                document.getElementById("reviewImgFile").value = "";
+            }
+
+            if (fileInput.files && fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    saveAndReload(e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else if (imgUrl) {
+                saveAndReload(imgUrl);
+            } else {
+                saveAndReload("");
+            }
+        }
+
+        function loadReviews() {
+            let list = document.getElementById("reviewList");
+            list.innerHTML = "";
+            let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+            reviews.forEach(r => {
+                let div = document.createElement("div");
+                div.className = "review";
+                let stars = Number(r.stars) || 5;
+                let starsStr = "★".repeat(stars) + "☆".repeat(5 - stars);
+                let photoHtml = "";
+                if (r.photo) {
+                    photoHtml = `<br><img src="${r.photo}" alt="Review photo" style="max-width: 100%; max-height: 250px; border-radius: 8px; margin-top: 10px; display: block; border: 1px solid var(--surface-border);">`;
+                }
+                div.innerHTML = `<strong>${r.name}</strong> <span class="stars">${starsStr}</span><p>${r.text}</p>${photoHtml}`;
+                if (r.reply) {
+                    let replyDiv = document.createElement("div");
+                    replyDiv.className = "reply";
+                    replyDiv.innerHTML = `<strong>Admin Reply:</strong> ${r.reply}`;
+                    div.appendChild(replyDiv);
+                }
+                list.appendChild(div);
+            });
+        }
+
+        // Blog Posts Data
+        const defaultBrandStories = [
+            {
+                id: 1,
+                title: "Finding the Perfect Fit: A Guide to Leather Care",
+                tag: "Footwear Guide",
+                date: "June 10, 2026",
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+                content: `
+                    <p>Premium leather footwear is an investment in both comfort and style. To ensure your pairs remain in pristine condition, a regular maintenance routine is essential.</p>
+                    <h3>1. Clean After Every Wear</h3>
+                    <p>Dust and dirt can wear away the finish of leather over time. Use a soft brush or a slightly damp cloth to wipe down your shoes after wearing them.</p>
+                    <h3>2. Condition Regularly</h3>
+                    <p>Leather is like skin and can dry out and crack. Apply a high-quality leather conditioner every 12 to 15 wears to restore moisture and keep the leather supple.</p>
+                    <h3>3. Use Shoe Trees</h3>
+                    <p>Unfinished cedar shoe trees absorb moisture and maintain the shoe's shape, preventing creasing and cracking.</p>
+                    <p>At Agrawal Footwear, we select only the finest grade leathers to build our shoes, guaranteeing lasting durability if cared for properly.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "5 Dinner Table Settings for Modern Hosting",
+                tag: "Table Styling",
+                date: "June 08, 2026",
+                image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80",
+                content: `
+                    <p>Hosting a dinner party is an art form, and the presentation of your table sets the mood for the entire evening. Here are five modern concepts for styling your dinner table using elegant crockery.</p>
+                    <h3>1. Minimalist Monochrome</h3>
+                    <p>Stick to a single tone—like matte black or soft cream plates paired with dark linens. This creates a clean, architectural aesthetic that looks incredibly sophisticated.</p>
+                    <h3>2. Rustic Organic</h3>
+                    <p>Combine stoneware plates with raw wood placemats and fresh branches or herbs. It feels cozy, authentic, and inviting.</p>
+                    <h3>3. Gold & Porcelain Luxury</h3>
+                    <p>Use white bone china plates with fine gold rims (like our Royal Gold collection) alongside gold-plated cutlery. Perfect for celebrations.</p>
+                    <p>Our crockery collection at Agrawal Footwear & Crockery features diverse styles from artisanal clay creations to royal gilded dinnerware, perfect for any hosting vibe.</p>
+                `
+            },
+            {
+                id: 3,
+                title: "Artistry in Clay: The Porcelain Making Process",
+                tag: "Behind the Brand",
+                date: "May 24, 2026",
+                image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?auto=format&fit=crop&w=800&q=80",
+                content: `
+                    <p>Have you ever wondered how raw kaolin clay is transformed into fine, porcelain plates? It is a journey of heat, skill, and timeless patience.</p>
+                    <h3>Phase 1: Shaping</h3>
+                    <p>The pure clay is mixed and spun on potters' wheels or cast in custom molds to achieve the delicate curves of our plates and cups.</p>
+                    <h3>Phase 2: First Fire (Bisque)</h3>
+                    <p>The clay is fired at a low temperature to harden it enough to receive glaze, yet remain porous enough to absorb it.</p>
+                    <h3>Phase 3: Glazing & High Firing</h3>
+                    <p>A glass-like coating is applied, and the pieces are fired again at extremely high temperatures (around 1300°C / 2372°F) which fuses the glaze to the clay body, producing glass-smooth, durable porcelain.</p>
+                    <p>Each piece in our collections undergoes rigorous quality control to ensure you receive only flawless masterpieces.</p>
+                `
+            }
+        ];
+
+        function loadBrandPosts() {
+            let stories = JSON.parse(localStorage.getItem("brandPosts"));
+            if (!stories || stories.length === 0) {
+                stories = defaultBrandStories;
+                localStorage.setItem("brandPosts", JSON.stringify(stories));
+            }
+            const grid = document.getElementById("brandPostsGrid");
+            grid.innerHTML = "";
+            stories.forEach(story => {
+                let card = document.createElement("div");
+                card.className = "post-card";
+                card.onclick = () => openPost(story.id);
+                card.innerHTML = `
+                    <div class="post-img-container">
+                        <div class="post-img" style="background-image: url('${story.image}')"></div>
+                        <span class="post-tag">${story.tag}</span>
+                    </div>
+                    <div class="post-body">
+                        <span class="post-date">${story.date}</span>
+                        <h4>${story.title}</h4>
+                        <p>${story.content.replace(/<[^>]*>/g, '').substring(0, 120)}...</p>
+                        <span class="post-link">Read Journal Entry &rarr;</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openPost(id) {
+            let stories = JSON.parse(localStorage.getItem("brandPosts")) || [];
+            const post = stories.find(s => s.id == id);
+            if (!post) return;
+            const modalBody = document.getElementById("modalBody");
+            modalBody.innerHTML = `
+                <div style="background-image: url('${post.image}'); height: 250px; background-size: cover; background-position: center; border-radius: 12px; margin-bottom: 20px; position: relative;">
+                    <span style="position: absolute; bottom: 15px; left: 15px; background: var(--primary-accent); padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; color: #fff;">${post.tag}</span>
+                </div>
+                <span style="color: var(--text-secondary); font-size: 13px;">Published ${post.date}</span>
+                <h2 style="font-family: var(--font-headings); font-size: 2rem; margin: 8px 0 20px 0; color: var(--text-primary);">${post.title}</h2>
+                <div class="post-content-full" style="line-height: 1.6; font-size: 15px; color: var(--text-secondary);">
+                    ${post.content}
+                </div>
+            `;
+            document.getElementById("postModal").classList.remove("hidden");
+        }
+
+        function closePostModal() {
+            document.getElementById("postModal").classList.add("hidden");
+        }
+
+        // Generate and download a professional PDF invoice
+        function downloadInvoice(orderId) {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            let order = orders.find(o => o.id == orderId);
+            if (!order) {
+                alert("Order not found!");
+                return;
+            }
+
+            // Load logo.js dynamically if not already loaded (prevents large blocking script on page load)
+            if (typeof LOGO_BASE64 === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'logo.js';
+                script.onload = () => {
+                    proceedDownloadInvoice(order);
+                };
+                script.onerror = () => {
+                    console.warn("logo.js failed to load. Downloading invoice with logo.png fallback.");
+                    proceedDownloadInvoice(order);
+                };
+                document.head.appendChild(script);
+            } else {
+                proceedDownloadInvoice(order);
+            }
+        }
+
+        function proceedDownloadInvoice(order) {
+            // Create temporary container for invoice HTML off-screen (opacity: 0 blocks html2canvas)
+            let invoiceWrapper = document.createElement("div");
+            invoiceWrapper.id = "temp-invoice-wrapper";
+            invoiceWrapper.style.position = "absolute";
+            invoiceWrapper.style.top = "-9999px";
+            invoiceWrapper.style.left = "-9999px";
+            invoiceWrapper.style.width = "794px"; /* A4 Width at 96 DPI */
+            invoiceWrapper.style.zIndex = "-99999";
+            invoiceWrapper.style.background = "#fff";
+
+            let invoiceEl = document.createElement("div");
+            invoiceEl.style.padding = "35px 35px";
+            invoiceEl.style.fontFamily = "Arial, sans-serif";
+            invoiceEl.style.color = "#000";
+            invoiceEl.style.background = "#fff";
+            invoiceEl.style.width = "724px"; /* 794 - 70px (padding) */
+            invoiceWrapper.appendChild(invoiceEl);
+            document.body.appendChild(invoiceWrapper);
+
+            // Compute prices
+            let rawPriceStr = (order.price || 'Rs. 1,499.00').replace(/[^0-9.]/g, '');
+            let totalAmount = parseFloat(rawPriceStr) || 1499.00;
+
+            // Delivery fee logic
+            let deliveryCharge = 80.00;
+            if (order.deliveryMethod === 'Store Pickup') {
+                deliveryCharge = 0.00;
+            } else if (order.deliveryCharge !== undefined) {
+                deliveryCharge = parseFloat(order.deliveryCharge) || 0.00;
+            }
+
+            let productTotal = totalAmount - deliveryCharge;
+            const logoSrc = (typeof LOGO_BASE64 !== 'undefined') ? LOGO_BASE64 : 'logo.png';
+
+            // Helper to format date
+            const orderDate = new Date(order.id);
+            const day = String(orderDate.getDate()).padStart(2, '0');
+            const month = String(orderDate.getMonth() + 1).padStart(2, '0');
+            const year = orderDate.getFullYear();
+            const invoiceDateFormatted = `${day}/${month}/${year}`;
+
+            // Helper to convert number to words
+            function numberToWords(num) {
+                const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+                const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+                function numToWordsLessThanThousand(n) {
+                    if (n === 0) return '';
+                    let str = '';
+                    if (n >= 100) {
+                        str += a[Math.floor(n / 100)] + 'Hundred ';
+                        n %= 100;
+                    }
+                    if (n >= 20) {
+                        str += b[Math.floor(n / 10)] + ' ';
+                        n %= 10;
+                    }
+                    if (n > 0) {
+                        str += a[n];
+                    }
+                    return str;
+                }
+
+                if (num === 0) return 'Zero';
+
+                let n = Math.floor(num);
+                let words = '';
+
+                if (Math.floor(n / 10000000) > 0) {
+                    words += numToWordsLessThanThousand(Math.floor(n / 10000000)) + 'Crore ';
+                    n %= 10000000;
+                }
+                if (Math.floor(n / 100000) > 0) {
+                    words += numToWordsLessThanThousand(Math.floor(n / 100000)) + 'Lakh ';
+                    n %= 100000;
+                }
+                if (Math.floor(n / 1000) > 0) {
+                    words += numToWordsLessThanThousand(Math.floor(n / 1000)) + 'Thousand ';
+                    n %= 1000;
+                }
+                words += numToWordsLessThanThousand(n);
+
+                return words.trim() + ' Only';
+            }
+
+            const totalInWords = 'Indian Rupee ' + numberToWords(totalAmount);
+
+            // Populate table rows
+            let itemsTableRows = `
+                <tr style="border-bottom: 1px solid #bbb;">
+                    <td style="border-right: 1px solid #bbb; padding: 10px; text-align: center; vertical-align: top;">1</td>
+                    <td style="border-right: 1px solid #bbb; padding: 10px; vertical-align: top; font-weight: bold; text-transform: uppercase;">${order.product}</td>
+                    <td style="border-right: 1px solid #bbb; padding: 10px; text-align: right; vertical-align: top;">1.00</td>
+                    <td style="border-right: 1px solid #bbb; padding: 10px; text-align: right; vertical-align: top;">${productTotal.toFixed(2)}</td>
+                    <td style="padding: 10px; text-align: right; vertical-align: top; font-weight: bold;">${productTotal.toFixed(2)}</td>
+                </tr>
+            `;
+
+            if (deliveryCharge > 0) {
+                itemsTableRows += `
+                    <tr style="border-bottom: 1px solid #bbb;">
+                        <td style="border-right: 1px solid #bbb; padding: 10px; text-align: center; vertical-align: top;">2</td>
+                        <td style="border-right: 1px solid #bbb; padding: 10px; vertical-align: top; font-weight: bold; text-transform: uppercase;">Delivery Charges</td>
+                        <td style="border-right: 1px solid #bbb; padding: 10px; text-align: right; vertical-align: top;">1.00</td>
+                        <td style="border-right: 1px solid #bbb; padding: 10px; text-align: right; vertical-align: top;">${deliveryCharge.toFixed(2)}</td>
+                        <td style="padding: 10px; text-align: right; vertical-align: top; font-weight: bold;">${deliveryCharge.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+
+            // Set content matching the user's uploaded template exactly
+            invoiceEl.innerHTML = `
+                <div style="border: 1px solid #bbb; padding: 25px; box-sizing: border-box; min-height: 840px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <!-- HEADER WITH LOGO AND COMPANY INFO -->
+                        <div style="display: flex; align-items: flex-start; justify-content: flex-start; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
+                            <img src="${logoSrc}" alt="Logo" style="height: 75px; width: auto; margin-right: 25px; object-fit: contain;">
+                            <div style="line-height: 1.4;">
+                                <h2 style="margin: 0; font-size: 18px; font-weight: bold; color: #000;">Agrawal Footwear And Crockery</h2>
+                                <div style="font-size: 12px; color: #333; margin-top: 4px;">
+                                    Agrawal Footwear And Crockery<br>
+                                    Main Market Birsinghpur<br>
+                                    Birsinghpur Madhya Pradesh 485226<br>
+                                    India<br>
+                                    shravanagrawal62@gmail.com
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TITLE -->
+                        <div style="text-align: right; margin-bottom: 20px;">
+                            <h1 style="margin: 0; font-size: 32px; font-weight: normal; color: #000; letter-spacing: 1px;">TAX INVOICE</h1>
+                        </div>
+
+                        <!-- DETAILS PANEL -->
+                        <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr>
+                                <td style="width: 50%; border-right: 1px solid #bbb; padding: 12px; vertical-align: top;">
+                                    <table style="font-size: 13px; border-collapse: collapse; width: 100%; line-height: 1.8;">
+                                        <tr>
+                                            <td style="width: 110px; color: #333;">#</td>
+                                            <td><strong>: INV-${order.id.toString().slice(-6)}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #333;">Invoice Date</td>
+                                            <td><strong>: ${invoiceDateFormatted}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #333;">Terms</td>
+                                            <td><strong>: Due on Receipt</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #333;">Due Date</td>
+                                            <td><strong>: ${invoiceDateFormatted}</strong></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="width: 50%; padding: 12px; vertical-align: top;">
+                                    <!-- Left blank to match the template exactly -->
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- BILL TO -->
+                        <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr style="background: #f2f2f2; border-bottom: 1px solid #bbb;">
+                                <td style="padding: 6px 12px; font-weight: bold; font-size: 12px; color: #333; text-transform: uppercase;">Bill To</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; line-height: 1.5; color: #000; font-size: 13px;">
+                                    <strong style="font-size: 14px;">${order.customer}</strong><br>
+                                    ${order.phone ? `Phone: ${order.phone}<br>` : ''}
+                                    ${order.email ? `Email: ${order.email}<br>` : ''}
+                                    Address: ${order.delivery || 'Main Market, Birsinghpur, Satna, MP, 485226'}
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ITEMS TABLE -->
+                        <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 25px; font-size: 13px;">
+                            <thead>
+                                <tr style="background: #f2f2f2; border-bottom: 1px solid #bbb; font-weight: bold;">
+                                    <th style="border-right: 1px solid #bbb; padding: 8px 6px; text-align: center; width: 40px;">#</th>
+                                    <th style="border-right: 1px solid #bbb; padding: 8px; text-align: left;">Item & Description</th>
+                                    <th style="border-right: 1px solid #bbb; padding: 8px 6px; text-align: center; width: 80px;">Qty</th>
+                                    <th style="border-right: 1px solid #bbb; padding: 8px; text-align: right; width: 120px;">Rate</th>
+                                    <th style="padding: 8px; text-align: right; width: 120px;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsTableRows}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- BOTTOM SECTION -->
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-top: auto;">
+                        <tr>
+                            <!-- LEFT PANEL: NOTES & TERMS -->
+                            <td style="width: 55%; vertical-align: top; padding-right: 25px; line-height: 1.6;">
+                                <div style="margin-bottom: 15px;">
+                                    <div style="font-weight: bold; font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 2px;">Total In Words</div>
+                                    <div style="font-weight: bold; font-style: italic; font-size: 13px; color: #000;">${totalInWords}</div>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    <div style="font-weight: bold; font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 2px;">Notes</div>
+                                    <div style="color: #333;">Thanks for your business.</div>
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold; font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 2px;">Terms & Conditions</div>
+                                    <div style="color: #333;">Goods One Sold Cannot be Retuned Back</div>
+                                </div>
+                            </td>
+
+                            <!-- RIGHT PANEL: TOTALS & SIGNATURE -->
+                            <td style="width: 45%; vertical-align: top;">
+                                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; line-height: 1.8;">
+                                    <tr>
+                                        <td style="text-align: right; padding: 4px 10px; color: #555;">Sub Total</td>
+                                        <td style="text-align: right; padding: 4px 10px; width: 110px; font-weight: bold;">${totalAmount.toFixed(2)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right; padding: 4px 10px; color: #555;">Discount</td>
+                                        <td style="text-align: right; padding: 4px 10px; font-weight: bold;">(-) 0.00</td>
+                                    </tr>
+                                    <tr style="border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; font-weight: bold; font-size: 14px;">
+                                        <td style="text-align: right; padding: 6px 10px;">Total</td>
+                                        <td style="text-align: right; padding: 6px 10px;">₹${totalAmount.toFixed(2)}</td>
+                                    </tr>
+                                    <tr style="color: #c0392b; font-weight: bold;">
+                                        <td style="text-align: right; padding: 6px 10px;">Payment Made</td>
+                                        <td style="text-align: right; padding: 6px 10px;">(-) ${totalAmount.toFixed(2)}</td>
+                                    </tr>
+                                    <tr style="border-top: 2px double #888; font-weight: bold; font-size: 15px;">
+                                        <td style="text-align: right; padding: 8px 10px;">Balance Due</td>
+                                        <td style="text-align: right; padding: 8px 10px;">₹0.00</td>
+                                    </tr>
+                                </table>
+
+                                <!-- SIGNATURE BOX -->
+                                <div style="border: 1px solid #bbb; padding: 15px; text-align: center;">
+                                    <div style="font-weight: bold; font-size: 11px; margin-bottom: 45px; text-transform: uppercase; color: #000;">AGRAWAL FOOTWEAR AND CROCKERY</div>
+                                    <div style="font-size: 12px; color: #444;">Authorized Signature</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            `;
+
+            let opt = {
+                margin:       [15, 15, 15, 15],
+                filename:     `Invoice_INV_${order.id}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Generate and save the PDF, cleaning up afterwards
+            html2pdf().from(invoiceEl).set(opt).save().then(() => {
+                document.body.removeChild(invoiceWrapper);
+            }).catch(err => {
+                console.error("PDF generation failed:", err);
+                document.body.removeChild(invoiceWrapper);
+            });
+        }
+
+        async function updateVisitorCount() {
+            try {
+                const isFirstVisit = !sessionStorage.getItem('visited');
+                if (isFirstVisit) {
+                    sessionStorage.setItem('visited', 'true');
+                }
+                const res = await fetch(API_BASE + '/api/visit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ increment: isFirstVisit })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('visitCountValue').innerText = data.count.toLocaleString();
+                }
+            } catch (e) {
+                console.error("Error updating visitor count:", e);
+                let localVisits = parseInt(localStorage.getItem('local_visits') || '0');
+                const isFirstVisit = !sessionStorage.getItem('visited');
+                if (isFirstVisit) {
+                    localVisits++;
+                    localStorage.setItem('local_visits', localVisits);
+                    sessionStorage.setItem('visited', 'true');
+                }
+                document.getElementById('visitCountValue').innerText = localVisits.toLocaleString() + " (Offline)";
+            }
+        }
+
+        // Initialize brand posts and products dropdown on load
+        if (typeof LOGO_BASE64 !== 'undefined') {
+            document.getElementById("mainLogo").src = LOGO_BASE64;
+        }
+        loadBrandPosts();
+        populateOrderProducts();
+        updateVisitorCount();
+    </script>
+</body>
+
+</html>
